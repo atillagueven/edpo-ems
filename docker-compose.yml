@@ -1,0 +1,171 @@
+
+services:
+  zeebe:
+    image: camunda/zeebe:${CAMUNDA_PLATFORM_VERSION:-8.1.9}
+    container_name: zeebe
+    environment:
+      - ZEEBE_BROKER_EXPORTERS_ELASTICSEARCH_CLASSNAME=io.camunda.zeebe.exporter.ElasticsearchExporter
+      - ZEEBE_BROKER_EXPORTERS_ELASTICSEARCH_ARGS_URL=http://elasticsearch:9200
+      - ZEEBE_BROKER_EXPORTERS_ELASTICSEARCH_ARGS_BULK_SIZE=1
+    ports:
+      - 26500:26500
+    volumes:
+      - zeebe:/usr/local/zeebe/data
+    networks:
+      - bet-it
+    depends_on:
+      - elasticsearch
+
+  operate:
+    image: camunda/operate:${CAMUNDA_PLATFORM_VERSION:-8.1.9}
+    container_name: operate
+    environment:
+      - CAMUNDA_OPERATE_ZEEBE_GATEWAYADDRESS=zeebe:26500
+      - CAMUNDA_OPERATE_ELASTICSEARCH_URL=http://elasticsearch:9200
+      - CAMUNDA_OPERATE_ZEEBEELASTICSEARCH_URL=http://elasticsearch:9200
+    ports:
+      - 8180:8080
+    networks:
+      - bet-it
+    depends_on:
+      - elasticsearch
+
+  tasklist:
+    image: camunda/tasklist:${CAMUNDA_PLATFORM_VERSION:-8.1.9}
+    container_name: tasklist
+    environment:
+      - CAMUNDA_TASKLIST_ZEEBE_GATEWAYADDRESS=zeebe:26500
+      - CAMUNDA_TASKLIST_ELASTICSEARCH_URL=http://elasticsearch:9200
+      - CAMUNDA_TASKLIST_ZEEBEELASTICSEARCH_URL=http://elasticsearch:9200
+    ports:
+      - 8181:8080
+    networks:
+      - bet-it
+    depends_on:
+      - elasticsearch
+
+  connectors: # https://docs.camunda.io/docs/components/integration-framework/connectors/out-of-the-box-connectors/available-connectors-overview/
+    image: camunda/connectors-bundle:${CAMUNDA_CONNECTORS_VERSION:-0.17.1}
+    container_name: connectors
+    environment:
+      - ZEEBE_CLIENT_BROKER_GATEWAY-ADDRESS=zeebe:26500
+      - ZEEBE_CLIENT_SECURITY_PLAINTEXT=true
+      - CAMUNDA_OPERATE_CLIENT_URL=http://operate:8080
+      - CAMUNDA_OPERATE_CLIENT_USERNAME=demo
+      - CAMUNDA_OPERATE_CLIENT_PASSWORD=demo
+    env_file: connector-secrets.txt
+    networks:
+      - bet-it
+    depends_on:
+      - zeebe
+      - operate
+
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION:-7.17.5}
+    container_name: elasticsearch
+    environment:
+      - cluster.name=camunda-cloud
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - xpack.security.enabled=false
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - elastic:/usr/share/elasticsearch/data
+    networks:
+      - bet-it
+
+
+  zookeeper:
+    image: "bitnami/zookeeper:latest"
+    hostname: zookeeper
+    networks:
+      - bet-it
+    ports:
+      - 2181:2181
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ALLOW_ANONYMOUS_LOGIN: 'yes'
+
+  kafka:
+    image: "bitnami/kafka:latest"
+    hostname: kafka
+    networks:
+      - bet-it
+    ports:
+      - 9092:9092
+      - 29092:29092
+    environment:
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_PORT: 9092
+      KAFKA_ADVERTISED_HOST_NAME: kafka
+      ALLOW_PLAINTEXT_LISTENER: 'yes'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_LISTENERS: PLAINTEXT://:9092,PLAINTEXT_HOST://:29092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+    depends_on:
+      - zookeeper
+
+  kafdrop:
+    image: obsidiandynamics/kafdrop
+    restart: "no"
+    ports:
+      - "9000:9000"
+    networks:
+      - bet-it
+    environment:
+      KAFKA_BROKERCONNECT: kafka:9092
+      JVM_OPTS: "-Xms16M -Xmx48M -Xss180K -XX:-TieredCompilation -XX:+UseStringDeduplication -noverify"
+    depends_on:
+      - kafka
+
+
+  bet-it-platform:
+    build:
+      context: bet-platform
+      dockerfile: Dockerfile
+    networks:
+      - bet-it
+    ports:
+      - "8082:8082"
+    depends_on:
+      - kafka
+  bank:
+    build:
+      context: bank
+      dockerfile: Dockerfile
+    networks:
+      - bet-it
+    ports:
+      - "8081:8081"
+    depends_on:
+      - kafka
+
+  game-master:
+    build:
+      context: game-master
+      dockerfile: Dockerfile
+    networks:
+      - bet-it
+    ports:
+      - "8083:8083"
+    depends_on:
+      - kafka
+
+
+volumes:
+  zeebe:
+    driver: local
+  elastic:
+    driver: local
+
+
+networks:
+  bet-it:
+    driver: bridge
