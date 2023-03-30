@@ -126,35 +126,14 @@ services:
       - kafka
 
 
-  bet-it-platform:
+  sales-service:
     build:
-      context: bet-platform
+      context: sales
       dockerfile: Dockerfile
     networks:
-      - bet-it
+      - ems
     ports:
       - "8082:8082"
-    depends_on:
-      - kafka
-  bank:
-    build:
-      context: bank
-      dockerfile: Dockerfile
-    networks:
-      - bet-it
-    ports:
-      - "8081:8081"
-    depends_on:
-      - kafka
-
-  game-master:
-    build:
-      context: game-master
-      dockerfile: Dockerfile
-    networks:
-      - bet-it
-    ports:
-      - "8083:8083"
     depends_on:
       - kafka
 
