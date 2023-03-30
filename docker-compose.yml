@@ -12,7 +12,7 @@ services:
     volumes:
       - zeebe:/usr/local/zeebe/data
     networks:
-      - bet-it
+      - ems
     depends_on:
       - elasticsearch
 
@@ -26,7 +26,7 @@ services:
     ports:
       - 8180:8080
     networks:
-      - bet-it
+      - ems
     depends_on:
       - elasticsearch
 
@@ -40,26 +40,9 @@ services:
     ports:
       - 8181:8080
     networks:
-      - bet-it
+      - ems
     depends_on:
       - elasticsearch
-
-  connectors: # https://docs.camunda.io/docs/components/integration-framework/connectors/out-of-the-box-connectors/available-connectors-overview/
-    image: camunda/connectors-bundle:${CAMUNDA_CONNECTORS_VERSION:-0.17.1}
-    container_name: connectors
-    environment:
-      - ZEEBE_CLIENT_BROKER_GATEWAY-ADDRESS=zeebe:26500
-      - ZEEBE_CLIENT_SECURITY_PLAINTEXT=true
-      - CAMUNDA_OPERATE_CLIENT_URL=http://operate:8080
-      - CAMUNDA_OPERATE_CLIENT_USERNAME=demo
-      - CAMUNDA_OPERATE_CLIENT_PASSWORD=demo
-    env_file: connector-secrets.txt
-    networks:
-      - bet-it
-    depends_on:
-      - zeebe
-      - operate
-
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION:-7.17.5}
@@ -77,14 +60,14 @@ services:
     volumes:
       - elastic:/usr/share/elasticsearch/data
     networks:
-      - bet-it
+      - ems
 
 
   zookeeper:
     image: "bitnami/zookeeper:latest"
     hostname: zookeeper
     networks:
-      - bet-it
+      - ems
     ports:
       - 2181:2181
     environment:
@@ -95,7 +78,7 @@ services:
     image: "bitnami/kafka:latest"
     hostname: kafka
     networks:
-      - bet-it
+      - ems
     ports:
       - 9092:9092
       - 29092:29092
@@ -118,25 +101,12 @@ services:
     ports:
       - "9000:9000"
     networks:
-      - bet-it
+      - ems
     environment:
       KAFKA_BROKERCONNECT: kafka:9092
       JVM_OPTS: "-Xms16M -Xmx48M -Xss180K -XX:-TieredCompilation -XX:+UseStringDeduplication -noverify"
     depends_on:
       - kafka
-
-
-  sales-service:
-    build:
-      context: sales
-      dockerfile: Dockerfile
-    networks:
-      - ems
-    ports:
-      - "8082:8082"
-    depends_on:
-      - kafka
-
 
 volumes:
   zeebe:
@@ -144,7 +114,6 @@ volumes:
   elastic:
     driver: local
 
-
 networks:
-  bet-it:
+  ems:
     driver: bridge
