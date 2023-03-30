@@ -5,11 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ch.unisg.ems.payment.dto.CamundaMessageDto;
 import ch.unisg.ems.payment.util.VariablesUtil;
-import org.camunda.bpm.engine.MismatchingMessageCorrelationException;
-import org.camunda.bpm.engine.RuntimeService;
-import org.camunda.bpm.engine.rest.dto.message.MessageCorrelationResultDto;
-import org.camunda.bpm.engine.runtime.MessageCorrelationBuilder;
-import org.camunda.bpm.engine.runtime.MessageCorrelationResult;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -19,8 +14,8 @@ import java.util.Map;
 @Slf4j
 public class MessageService {
 
-    private final RuntimeService runtimeService;
-
+    // private final RuntimeService runtimeService;
+/*
     public MessageCorrelationResult correlateMessage(CamundaMessageDto camundaMessageDto, String messageName) {
         try {
             log.info("Consuming message {}", messageName);
@@ -48,4 +43,8 @@ public class MessageService {
         }
         return null;
     }
+
+
+ */
+
 }
