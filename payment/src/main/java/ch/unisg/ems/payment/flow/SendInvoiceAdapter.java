@@ -22,18 +22,16 @@ import io.camunda.zeebe.client.api.worker.JobWorker;
 @Component
 public class SendInvoiceAdapter {
 
-
     @ZeebeWorker(type = "send-invoice")
     public void handle(JobClient client, ActivatedJob job) {
         // generate an UUID for this communication
         String correlationId = UUID.randomUUID().toString();
 
-        System.out.println("Access service ");
+        System.out.println("Access service Send Invoice");
 
 
         client.newCompleteCommand(job.getKey()) //
                 .variables(Collections.singletonMap("CorrelationId_FetchGoods", correlationId)) //
                 .send().join();
     }
-
 }

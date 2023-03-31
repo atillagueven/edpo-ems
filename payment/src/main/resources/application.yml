@@ -1,4 +1,7 @@
-server.port: 8081
+server:
+  port: 8089
+  servlet:
+    context-path: "/api"
 
 spring:
   datasource.url: jdbc:h2:file:./camunda-h2-database
@@ -22,5 +25,5 @@ camunda.bpm:
 kafka:
   bootstrap-address: localhost:9092
   ems-payment.topic-name: ems-payment
-  group-id: ems-payment
+  group-id: "ems-payment"
   trusted-packages: ch.unisg.ems.payment.dto

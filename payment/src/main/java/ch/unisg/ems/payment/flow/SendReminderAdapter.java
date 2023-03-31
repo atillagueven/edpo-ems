@@ -14,7 +14,7 @@ public class SendReminderAdapter {
         // generate an UUID for this communication
         String correlationId = UUID.randomUUID().toString();
 
-        System.out.println("Access service ");
+        System.out.println("Access service Send Reminder");
 
 
         client.newCompleteCommand(job.getKey()) //
