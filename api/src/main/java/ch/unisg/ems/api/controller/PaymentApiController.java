@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin
-public class RestApiController {
+public class PaymentApiController {
 
     private final KafkaTemplate<String, CamundaMessageDto> kafkaTemplate;
 

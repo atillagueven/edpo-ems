@@ -1,15 +1,27 @@
-spring.datasource.url: jdbc:h2:file:./camunda-h2-database
+server.port: 8082
+
+spring:
+  datasource.url: jdbc:h2:file:./camunda-h2-database
+  application.name: sales
+  kafka:
+    bootstrap-servers: "localhost:9092"
+    consumer.auto-offset-reset: earliest
+    consumer:
+    group-id: "ems-sales"
+
+zeebe:
+  client:
+    broker.gateway-address: "localhost:26500"
+    security.plaintext: true
 
 camunda.bpm:
   admin-user:
     id: demo
     password: demo
-  filter.create: All Tasks
+    filter.create: All Tasks
 
 kafka:
   bootstrap-address: localhost:9092
-  group-id: someGroupId
-  trusted-packages: ch.unisg.ems.sales.dto
-
-server:
-  port: 8083
+  ems-payment.topic-name: ems-payment
+  group-id: ems-payment
+  trusted-packages: ch.unisg.ems.payment.dto
