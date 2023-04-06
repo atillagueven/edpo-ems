@@ -10,7 +10,7 @@ public class Message<T> {
     // Cloud Events compliant
     private String type;
     private String id = UUID.randomUUID().toString(); // unique id of this message
-    private String source="Order Zeebe";
+    private String source="EMS Sales";
     private Date time = new Date();
     private T data;
     private String datacontenttype="application/json";
@@ -19,7 +19,7 @@ public class Message<T> {
     // Extension attributes
     private String traceid = UUID.randomUUID().toString(); // trace id, default: new unique
     private String correlationid; // id which can be used for correlation later if required
-    private String group = "flowing-retail";
+    private String group = "ems";
 
     public Message() {
     }
@@ -105,5 +105,8 @@ public class Message<T> {
         return group;
     }
 
+    public String getTraceId() {
+        return traceid;
+    }
 }
 

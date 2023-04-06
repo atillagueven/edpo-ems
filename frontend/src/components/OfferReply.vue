@@ -4,34 +4,29 @@
       <v-col>
         <v-row>
           <v-col>
-            <h3>Sales</h3>
+            <h3>Offer Reply</h3>
           </v-col>
         </v-row>
         <v-row>
           <v-col cols="12" md="6">
             <v-card>
               <v-card-title class="my-3">
-                Request an Offer
+                Offer reply
               </v-card-title>
               <v-card-text>
                 <v-row>
-                  <v-col>
-                    <v-text-field v-model="customerName" label="Requester"></v-text-field>
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col>
-                    <v-text-field v-model="customerEmail" label="Email"></v-text-field>
-                  </v-col>
-                </v-row>
-                <v-row>
                 <v-col>
-                  <v-textarea v-model="message" label="Load Profile"></v-textarea>
+                  <v-checkbox v-model="offerAccepted" label="Offer accepted"></v-checkbox>
                 </v-col>
               </v-row>
                 <v-row>
                   <v-col>
-                    <v-btn @click="requestSalesOffer" block color="primary">Request Offer</v-btn>
+                    <v-checkbox v-if="!offerAccepted" v-model="newOfferRequested" label="RequestNewOffer"></v-checkbox>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col>
+                    <v-btn @click="replyToOffer" block color="primary">Reply</v-btn>
                   </v-col>
                 </v-row>
               </v-card-text>
@@ -50,28 +45,38 @@ export default {
   name: "Sales",
   data() {
     return {
-      customerName: "valentin",
-      customerEmail: "valentin.berger@student.unisg.ch",
+      requester: "valentin",
+      email: "valentin.berger@student.unisg.ch",
       message: "Request details about the load profile",
+      offerAccepted: true,
+      newOfferRequested: false,
+      offerId: ""
     }
   },
   created() {
 
   },
   mounted() {
+    // get url param id
+    let url = new URL(window.location.href)
+    let id = url.searchParams.get("id")
+    this.offerId = id
   },
   methods: {
-    requestSalesOffer() {
+    replyToOffer() {
       let postData = {
-        customerName: this.customerName,
-        customerEmail: this.customerEmail,
+        offerId: this.offerId,
+        requester: this.requester,
+        email: this.email,
         message: this.message,
+        offerAccepted: this.offerAccepted,
+        newOfferRequested: this.offerAccepted ? false : this.newOfferRequested,
       }
 
       console.log(postData)
 
       axios
-        .post('http://localhost:8081/api/sales/request-offer', postData)
+        .post('http://localhost:8081/api/sales/answer-offer', postData)
         .then((response) => {
           console.log(response)
         })

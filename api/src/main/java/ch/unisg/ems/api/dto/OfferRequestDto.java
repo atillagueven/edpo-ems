@@ -10,13 +10,11 @@ import java.util.UUID;
 @NoArgsConstructor
 public class OfferRequestDto implements Serializable {
 
-    private String offerId;
+    @Getter
+    private String customerName;
 
     @Getter
-    private String requester;
-
-    @Getter
-    private String email;
+    private String customerEmail;
 
     @Getter
     private String message;

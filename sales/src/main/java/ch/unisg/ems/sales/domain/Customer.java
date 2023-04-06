@@ -1,7 +1,5 @@
 package ch.unisg.ems.sales.domain;
 
-import java.util.UUID;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -17,7 +15,7 @@ public class Customer {
     private String id;
 
     private String name;
-    private String address;
+    private String email;
 
     public String getName() {
         return name;
@@ -26,11 +24,11 @@ public class Customer {
         this.name = name;
         return this;
     }
-    public String getAddress() {
-        return address;
+    public String getEmail() {
+        return email;
     }
-    public Customer setAddress(String address) {
-        this.address = address;
+    public Customer setEmail(String address) {
+        this.email = address;
         return this;
     }
 
