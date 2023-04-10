@@ -18,12 +18,10 @@ public class Offer {
 
     @Id
     protected String id;
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER  )
-    protected Customer customer = new Customer();
 
     private String customerEmail;
     private String customerName;
-    private String message;
+    private Integer loadProfile;
 
     public Offer() {}
 
@@ -32,9 +30,9 @@ public class Offer {
         ObjectMapper objectMapper = new ObjectMapper();
         Offer offer = objectMapper.readValue(json, Offer.class);
         this.id = UUID.randomUUID().toString();
-        this.customer = new Customer();
-        this.customer.setName(offer.customerName);
-        this.customer.setEmail(offer.customerEmail);
+        this.customerName = offer.customerName;
+        this.customerEmail = offer.customerEmail;
+        this.loadProfile = offer.loadProfile;
     }
 
     public String getId() {
@@ -44,14 +42,6 @@ public class Offer {
     @JsonProperty("offerId")
     public void setId(String id) {
         this.id = id;
-    }
-
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
     }
 
     public String getCustomerEmail() {
@@ -70,11 +60,11 @@ public class Offer {
         this.customerName = customerName;
     }
 
-    public String getMessage() {
-        return message;
+    public Integer getLoadProfile() {
+        return loadProfile;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setLoadProfile(Integer loadProfile) {
+        this.loadProfile = loadProfile;
     }
 }

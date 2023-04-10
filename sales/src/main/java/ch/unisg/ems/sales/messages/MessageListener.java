@@ -59,15 +59,20 @@ public class MessageListener {
         System.out.println("New offer requested: " + messagePayload);
         try {
             Offer offer = new Offer(messagePayload);
+
             offerRepository.save(offer);
+
+
             String traceId = UUID.randomUUID().toString();
             OfferFlowContext context = new OfferFlowContext();
             context.setOfferId(offer.getId());
             context.setTraceId(traceId);
+            context.setOfferMessage("");
+            context.setLoadProfile(offer.getLoadProfile());
             context.setOfferAccepted(false);
             context.setNewOfferRequested(false);
             context.setReminderSent(false);
-            System.out.println("New offer requested, start sales process with: " + context);
+
 
             zeebe.newCreateInstanceCommand() //
                     .bpmnProcessId("sales-service") //

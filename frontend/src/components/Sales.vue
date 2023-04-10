@@ -26,7 +26,7 @@
                 </v-row>
                 <v-row>
                 <v-col>
-                  <v-textarea v-model="message" label="Load Profile"></v-textarea>
+                  <v-text-field v-model="loadProfile" type="number" label="Average engergy consumption in KWH"></v-text-field>
                 </v-col>
               </v-row>
                 <v-row>
@@ -52,7 +52,7 @@ export default {
     return {
       customerName: "valentin",
       customerEmail: "valentin.berger@student.unisg.ch",
-      message: "Request details about the load profile",
+      loadProfile: 0,
     }
   },
   created() {
@@ -65,7 +65,7 @@ export default {
       let postData = {
         customerName: this.customerName,
         customerEmail: this.customerEmail,
-        message: this.message,
+        loadProfile: this.loadProfile,
       }
 
       console.log(postData)
