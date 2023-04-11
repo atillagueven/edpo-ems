@@ -1,0 +1,25 @@
+{
+  "components": [
+    {
+      "text": "# Offer creation form",
+      "type": "text",
+      "id": "Field_085fb0p",
+      "properties": {}
+    },
+    {
+      "label": "Email Content",
+      "type": "textfield",
+      "id": "Field_0me45bg",
+      "key": "offerMessage"
+    }
+  ],
+  "type": "default",
+  "id": "OfferCreationForm",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.1.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.8.0"
+  },
+  "schemaVersion": 7
+}
