@@ -42,6 +42,9 @@ public class CreateOfferAdapter {
         newVariables.put("batterySizeRecomendation",recommendedBatterySize);
 
 
-        client.newCompleteCommand(job.getKey()).send().join();
+        client.newCompleteCommand(job.getKey())
+                .variables(newVariables)
+                .send()
+                .join();
     }
 }

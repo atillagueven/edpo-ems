@@ -4,7 +4,7 @@
       <v-col>
         <v-row>
           <v-col>
-            <h3>Offer Reply</h3>
+            <h3>Reply to your offer with ID: {{ offerId }}</h3>
           </v-col>
         </v-row>
         <v-row>
@@ -16,12 +16,12 @@
               <v-card-text>
                 <v-row>
                 <v-col>
-                  <v-checkbox v-model="offerAccepted" label="Offer accepted"></v-checkbox>
+                  <v-checkbox v-model="offerAccepted" label="Accept offer"></v-checkbox>
                 </v-col>
               </v-row>
                 <v-row>
                   <v-col>
-                    <v-checkbox v-if="!offerAccepted" v-model="newOfferRequested" label="RequestNewOffer"></v-checkbox>
+                    <v-checkbox v-if="!offerAccepted" v-model="newOfferRequested" label="Request new offer"></v-checkbox>
                   </v-col>
                 </v-row>
                 <v-row>

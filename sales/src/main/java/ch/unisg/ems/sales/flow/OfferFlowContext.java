@@ -43,6 +43,7 @@ public class OfferFlowContext {
         context.loadProfile = Integer.parseInt(values.get("loadProfile").toString());
         context.offerAccepted = Boolean.parseBoolean(values.get("offerAccepted").toString());
         context.newOfferRequested = Boolean.parseBoolean(values.get("newOfferRequested").toString());
+        context.reminderSent = Boolean.parseBoolean(values.get("reminderSent").toString());
         return context;
     }
 
@@ -54,6 +55,7 @@ public class OfferFlowContext {
         map.put("loadProfile", loadProfile.toString());
         map.put("offerAccepted", offerAccepted.toString());
         map.put("newOfferRequested", newOfferRequested.toString());
+        map.put("reminderSent", reminderSent.toString());
 
         return map;
     }

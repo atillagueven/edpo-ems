@@ -36,7 +36,7 @@ public class MessageListener {
           String emailContent = "Dear " + clientName + ",\n\n"
                   + offerMessage + "\n\n"
                   + "Please click on the following link to accept the offer:\n"
-                  + "http://localhost:3001/sales?id=" + offerId + "\n\n"
+                  + "http://localhost:3001/sales/offer-reply?id=" + offerId + "\n\n"
                   + "Best regards,\n" + "EMS Team";
 
           notificationService.sendEmail(clientEmail, emailContent);

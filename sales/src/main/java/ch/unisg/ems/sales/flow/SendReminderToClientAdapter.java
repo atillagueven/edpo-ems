@@ -2,19 +2,17 @@ package ch.unisg.ems.sales.flow;
 
 import ch.unisg.ems.sales.domain.Offer;
 import ch.unisg.ems.sales.flow.payload.SendOfferToClientCommandPayload;
-import ch.unisg.ems.sales.messages.MessageSender;
 import ch.unisg.ems.sales.messages.Message;
+import ch.unisg.ems.sales.messages.MessageSender;
 import ch.unisg.ems.sales.persistence.OfferRepository;
 import io.camunda.zeebe.client.api.response.ActivatedJob;
 import io.camunda.zeebe.client.api.worker.JobClient;
 import io.camunda.zeebe.spring.client.annotation.ZeebeWorker;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 
-@Component
-public class SendOfferToClientAdapter {
+public class SendReminderToClientAdapter {
 
     @Autowired
     private MessageSender messageSender;
@@ -23,9 +21,9 @@ public class SendOfferToClientAdapter {
     private OfferRepository offerRepository;
 
 
-    @ZeebeWorker(type = "send-offer-to-client")
-    public void sendOfferToClient(JobClient client, ActivatedJob job) {
-        System.out.println("Sending offer to client: ");
+    @ZeebeWorker(type = "send-reminder-to-client")
+    public void sendReminderToClient(JobClient client, ActivatedJob job) {
+        System.out.println("Sending Reminder to client: ");
 
         OfferFlowContext context = OfferFlowContext.fromMap(job.getVariablesAsMap());
         Offer offer = offerRepository.findById(context.getOfferId()).get();
@@ -43,6 +41,12 @@ public class SendOfferToClientAdapter {
                 payload
         ), "ems-notification");
 
-        client.newCompleteCommand(job.getKey()).send().join();
+        HashMap<String, String> newVariables = new HashMap<>();
+        newVariables.put("reminderSent","true");
+
+        client.newCompleteCommand(job.getKey())
+                .variables(newVariables)
+                .send()
+                .join();
     }
 }
