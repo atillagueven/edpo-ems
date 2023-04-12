@@ -32,12 +32,12 @@ public class OfferPlacedAdapter {
         payload.setOfferId(context.getOfferId());
         payload.setClientName(offer.getCustomerName());
         payload.setClientEmail(offer.getCustomerEmail());
-        payload.setBatterySize(context.getLoadProfile().toString());
+        payload.setBatterySize(offer.getBatterySize());
 
         System.out.println("Publish order placed event: " + payload);
 
         messageSender.send(new Message<OfferPlacedEventPayload>(
-                "OfferPlacedEvent",
+                "OrderPlacedEvent",
                 payload
         ));
 

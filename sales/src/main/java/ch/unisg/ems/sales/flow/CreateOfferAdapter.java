@@ -26,6 +26,7 @@ public class CreateOfferAdapter {
     public void handle(JobClient client, ActivatedJob job) {
         System.out.println("Access service CreateOffer");
         OfferFlowContext context = OfferFlowContext.fromMap(job.getVariablesAsMap());
+        Offer offer = offerRepository.findById(context.getOfferId()).get();
 
         String recommendedBatterySize = "";
         Integer consumption = context.getLoadProfile();
@@ -37,6 +38,9 @@ public class CreateOfferAdapter {
         } else {
             recommendedBatterySize = "Small";
         }
+
+        offer.setBatterySize(recommendedBatterySize);
+        offerRepository.save(offer);
 
         HashMap<String, String> newVariables = new HashMap<>();
         newVariables.put("batterySizeRecomendation",recommendedBatterySize);

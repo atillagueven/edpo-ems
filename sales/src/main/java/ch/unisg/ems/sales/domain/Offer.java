@@ -23,6 +23,8 @@ public class Offer {
     private String customerName;
     private Integer loadProfile;
 
+    private String batterySize;
+
     public Offer() {}
 
     // Needs refactor
@@ -33,6 +35,7 @@ public class Offer {
         this.customerName = offer.customerName;
         this.customerEmail = offer.customerEmail;
         this.loadProfile = offer.loadProfile;
+        this.batterySize = offer.batterySize;
     }
 
     public String getId() {
@@ -66,5 +69,13 @@ public class Offer {
 
     public void setLoadProfile(Integer loadProfile) {
         this.loadProfile = loadProfile;
+    }
+
+    public String getBatterySize() {
+        return batterySize;
+    }
+
+    public void setBatterySize(String batterySize) {
+        this.batterySize = batterySize;
     }
 }
