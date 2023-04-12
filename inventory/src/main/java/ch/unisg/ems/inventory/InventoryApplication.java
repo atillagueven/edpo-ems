@@ -1,11 +1,13 @@
 package ch.unisg.ems.inventory;
 
-import org.camunda.bpm.spring.boot.starter.annotation.EnableProcessApplication;
+import io.camunda.zeebe.spring.client.EnableZeebeClient;
+import io.camunda.zeebe.spring.client.annotation.ZeebeDeployment;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-@EnableProcessApplication("application")
+@EnableZeebeClient
+@ZeebeDeployment(classPathResources = "inventory_service.bpmn")
 public class InventoryApplication {
 
   public static void main(String[] args) {

@@ -24,7 +24,7 @@ services:
       - CAMUNDA_OPERATE_ELASTICSEARCH_URL=http://elasticsearch:9200
       - CAMUNDA_OPERATE_ZEEBEELASTICSEARCH_URL=http://elasticsearch:9200
     ports:
-      - 8180:8080
+      - "8180:8080"
     networks:
       - ems
     depends_on:
