@@ -3,7 +3,6 @@ package ch.unisg.ems.inventory.messages;
 import ch.unisg.ems.inventory.domain.AppointmentReply;
 import ch.unisg.ems.inventory.domain.Order;
 import ch.unisg.ems.inventory.flow.InventoryFlowContext;
-import ch.unisg.ems.inventory.persistence.OrderRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.camunda.zeebe.client.ZeebeClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +22,6 @@ public class MessageListener {
     private final String salesTopic = "ems-sales";
     private final String inventoryTopic = "ems-inventory";
 
-    @Autowired
-    private OrderRepository orderRepository;
 
     @Qualifier("zeebeClientLifecycle")
     @Autowired
@@ -41,7 +38,7 @@ public class MessageListener {
     public void salesMessageReceived(String messagePayload, @Header("type") String messageType) throws Exception{
         System.out.println("Message received: ems-sales" );
 
-        if("OrderReceivedEvent".equals(messageType)) {
+        if("OrderPlacedEvent".equals(messageType)) {
             orderReceived(messagePayload);
         } else if("appointmentReceived".equals(messageType)) {
             appointmentReceived(messagePayload);
@@ -58,7 +55,7 @@ public class MessageListener {
     @Transactional
     @KafkaListener(id = "inventory", topics = inventoryTopic)
     public void inventoryMessageReceived(String messagePayload, @Header("type") String messageType) throws Exception{
-        System.out.println("Message received: ems-inventory" );
+        System.out.println("Message received: ems-inventory" + messagePayload);
 
         if ("ClientAppointmentReceivedEvent".equals(messageType)) {
             appointmentReceived(messagePayload);
@@ -75,28 +72,24 @@ public class MessageListener {
     public void orderReceived(String messagePayload) {
         System.out.println("New order received: " + messagePayload);
         try {
-            Order order = new Order(messagePayload);
-
-            orderRepository.save(order);
+//            Order order = new Order(messagePayload);
 
 
-            String traceId = UUID.randomUUID().toString();
-            InventoryFlowContext context = new InventoryFlowContext();
-            context.setOfferId(order.getId());
-            context.setTraceId(traceId);
-            context.setOfferMessage("");
-            context.setLoadProfile(order.getLoadProfile());
-            context.setOfferAccepted(false);
+//            String traceId = UUID.randomUUID().toString();
+//            InventoryFlowContext context = new InventoryFlowContext();
+//            context.setOfferId(order.getId());
+//            context.setTraceId(traceId);
+//            context.setOfferMessage("");
+//            context.setLoadProfile(order.getLoadProfile());
+//            context.setOfferAccepted(false);
 
 
             zeebe.newCreateInstanceCommand() //
                     .bpmnProcessId("inventory-service") //
                     .latestVersion() //
-                    .variables(context.asMap()) //
+//                    .variables(context.asMap()) //
                     .send().join();
 
-        } catch (IOException e) {
-            System.out.println("Error while receiving the order: " + e.getMessage());
         } catch (Exception e) {
             System.out.println("Error while starting the bpmn process: " + e.getMessage());
         }
