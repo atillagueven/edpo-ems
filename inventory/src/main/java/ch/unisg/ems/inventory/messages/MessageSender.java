@@ -20,8 +20,8 @@ public class MessageSender {
 
     public static final String TOPIC_NAME = "offer-received-topic";
 
-    //@Autowired
-    //private KafkaTemplate<String, byte[]> kafkaTemplate;
+    @Autowired
+    private KafkaTemplate<String, String> kafkaTemplate;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -37,15 +37,15 @@ public class MessageSender {
             String jsonMessage = objectMapper.writeValueAsString(m);
 
             // wrap into a proper message for Kafka including a header
-//            ProducerRecord<String, String> record = new ProducerRecord<String, String>("ems-sales", jsonMessage);
-//            record.headers().add("type", m.getType().getBytes());
+            // ProducerRecord<String, String> record = new ProducerRecord<String, String>("ems-sales", jsonMessage);
+            // record.headers().add("type", m.getType().getBytes());
 
             byte[] messageBytes = jsonMessage.getBytes(StandardCharsets.UTF_8);
-            ProducerRecord<String, byte[]> record = new ProducerRecord<String, byte[]>("ems-sales", messageBytes);
+            ProducerRecord<String, String> record = new ProducerRecord<String, String>("ems-sales", jsonMessage);
             record.headers().add("type", m.getType().getBytes());
 
             // and send it
-            //kafkaTemplate.send(record);
+            kafkaTemplate.send(record);
         } catch (Exception e) {
             throw new RuntimeException("Could not transform and send message: "+ e.getMessage(), e);
         }
@@ -61,11 +61,11 @@ public class MessageSender {
 //            record.headers().add("type", m.getType().getBytes());
 
             byte[] messageBytes = jsonMessage.getBytes(StandardCharsets.UTF_8);
-            ProducerRecord<String, byte[]> record = new ProducerRecord<String, byte[]>(topic, messageBytes);
+            ProducerRecord<String, String> record = new ProducerRecord<String, String>(topic, jsonMessage);
             record.headers().add("type", m.getType().getBytes());
 
             // and send it
-            //kafkaTemplate.send(record);
+            kafkaTemplate.send(record);
         } catch (Exception e) {
             throw new RuntimeException("Could not transform and send message: "+ e.getMessage(), e);
         }

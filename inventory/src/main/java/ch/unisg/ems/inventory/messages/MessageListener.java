@@ -1,5 +1,6 @@
 package ch.unisg.ems.inventory.messages;
 
+import ch.unisg.ems.inventory.domain.AppointmentReply;
 import ch.unisg.ems.inventory.domain.Order;
 import ch.unisg.ems.inventory.flow.InventoryFlowContext;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.UUID;
 
 @Component
@@ -38,6 +40,8 @@ public class MessageListener {
 
         if("OrderPlacedEvent".equals(messageType)) {
             orderReceived(messagePayload);
+        } else if("appointmentReceived".equals(messageType)) {
+            appointmentReceived(messagePayload);
         }
 
         else {
@@ -96,20 +100,20 @@ public class MessageListener {
         //Here you would maybe we should read something from the payload:
         System.out.println("Appointment received: " + messagePayload);
 
-        /**
-        OrderReply orderReply = new OrderReply(messagePayload);
 
-        HashMap<String, String> newVariables = new HashMap<>();
-        newVariables.put("offerStatus",offerReply.getOfferAccepted() ? "accepted" : offerReply.getNewOfferRequested() ? "newOfferRequested" :"rejected");
+        AppointmentReply appointmentReply = new AppointmentReply(messagePayload);
+
+        HashMap<String, String> newAppointment = new HashMap<>();
+        newAppointment.put("appointmentDate",appointmentReply.getAppointmentDate());
 
         zeebe.newPublishMessageCommand() //
-                .messageName("ClientAppointmentReveivedEvent")
-                .correlationKey(orderReply.getOfferId())
-                .variables(newVariables)
+                .messageName("ClientAppointmentReceivedEvent")
+                .correlationKey(appointmentReply.getAppointmentDate())
+                .variables(newAppointment)
                 .send().join();
 
-        System.out.println("Correlated " + orderReply.getOfferId());
-         **/
+        System.out.println("Correlated " + appointmentReply.getAppointmentDate());
+
     }
 
 

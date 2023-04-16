@@ -42,6 +42,24 @@ public class MessageListener {
           notificationService.sendEmail(clientEmail, emailContent);
       } else if ("SendReminderToClientCommand".equals(messageType)) {
           System.out.println("Received message: " + messageType);
+      } else if ("SendAssemblyInfoToClientCommand".equals(messageType)) {
+          System.out.println("Received message: " + messageType);
+
+          JsonNode message = objectMapper.readTree(messageJson);
+          String offerId = message.get("data").get("offerId").asText();
+          String clientEmail = message.get("data").get("clientEmail").asText();
+          String clientName = message.get("data").get("clientName").asText();
+          String offerMessage = message.get("data").get("offerMessage").asText();
+          String emsSystemRecommendation = message.get("data").get("emsSystemRecommendation").asText();
+
+          String emailContent = "Dear " + clientName + ",\n\n"
+                  + offerMessage + "\n\n"
+                  + "Please click on the following link to arrange an appointment:\n"
+                  + "http://localhost:3001/inventory/offer-reply?id=" + offerId + "\n\n"
+                  + "Best regards,\n" + "EMS Team";
+
+          notificationService.sendEmail(clientEmail, emailContent);
+
       } else {
             System.out.println("Received unknown message: " + messageType);
       }

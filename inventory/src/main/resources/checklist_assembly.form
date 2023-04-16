@@ -1,0 +1,42 @@
+{
+  "components": [
+    {
+      "text": "#Assembly Parts for the EMS System\nPlease check all the boxes if the parts are ready to be installed.",
+      "type": "text",
+      "id": "Field_082e9wy"
+    },
+    {
+      "label": "Battery in matching size",
+      "type": "checkbox",
+      "id": "Field_102xpab",
+      "key": "battery"
+    },
+    {
+      "label": "Battery Bag",
+      "type": "checkbox",
+      "id": "Field_07gf17j",
+      "key": "batterybag"
+    },
+    {
+      "label": "4x 13mm Screws",
+      "type": "checkbox",
+      "id": "Field_0nf1azl",
+      "key": "screws"
+    },
+    {
+      "label": "6x Infinity Stones",
+      "type": "checkbox",
+      "id": "Field_1qmqblk",
+      "key": "stones"
+    }
+  ],
+  "type": "default",
+  "id": "assemblyParts",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.1.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.8.0"
+  },
+  "schemaVersion": 7
+}
