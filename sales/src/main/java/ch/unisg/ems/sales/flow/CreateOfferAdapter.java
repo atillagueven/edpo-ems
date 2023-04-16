@@ -6,6 +6,7 @@ import io.camunda.zeebe.client.ZeebeClient;
 import io.camunda.zeebe.client.api.response.ActivatedJob;
 import io.camunda.zeebe.client.api.worker.JobClient;
 import io.camunda.zeebe.spring.client.annotation.ZeebeWorker;
+import io.camunda.zeebe.spring.client.exception.ZeebeBpmnError;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -30,6 +31,11 @@ public class CreateOfferAdapter {
 
         String recommendedBatterySize = "";
         Integer consumption = context.getLoadProfile();
+
+        if(consumption < 0) {
+            System.out.println("Battery size could not be calculated");
+            throw new ZeebeBpmnError("Error_BatteryCalculationError", "Battery size could not be calculated");
+        }
 
         if (consumption > 500) {
             recommendedBatterySize = "Large";
