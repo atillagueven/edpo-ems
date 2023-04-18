@@ -1,4 +1,20 @@
-spring.datasource.url: jdbc:h2:file:./camunda-h2-database
+spring.datasource.url: jdbc:h2:file:./inventory-camunda-h2-database
+
+server.port: 8087
+
+spring:
+  datasource.url: jdbc:h2:file:./inventory-camunda-h2-database
+  application.name: inventory
+  kafka:
+    bootstrap-servers: "localhost:9092"
+    consumer.auto-offset-reset: earliest
+    consumer:
+      group-id: "ems-inventory"
+
+zeebe:
+  client:
+    broker.gateway-address: "localhost:26500"
+    security.plaintext: true
 
 camunda.bpm:
   admin-user:
@@ -8,5 +24,6 @@ camunda.bpm:
 
 kafka:
   bootstrap-address: localhost:9092
-  group-id: someGroupId
+  ems-payment.topic-name: ems-inventory
+  group-id: "ems-inventory"
   trusted-packages: ch.unisg.ems.inventory.dto

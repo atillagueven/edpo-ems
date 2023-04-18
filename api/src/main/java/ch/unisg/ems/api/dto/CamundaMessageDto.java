@@ -1,7 +1,6 @@
 package ch.unisg.ems.api.dto;
 
 import lombok.*;
-
 import java.io.Serializable;
 
 @Data

@@ -1,11 +1,13 @@
 package ch.unisg.ems.sales;
 
-import org.camunda.bpm.spring.boot.starter.annotation.EnableProcessApplication;
+import io.camunda.zeebe.spring.client.EnableZeebeClient;
+import io.camunda.zeebe.spring.client.annotation.ZeebeDeployment;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-@EnableProcessApplication
+@EnableZeebeClient
+@ZeebeDeployment(classPathResources = "sales_service.bpmn")
 public class SalesApplication {
 
   public static void main(String[] args) {
