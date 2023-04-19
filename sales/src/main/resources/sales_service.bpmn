@@ -98,10 +98,6 @@
     <bpmn:endEvent id="Event_13m9ecg" name="Order Placed">
       <bpmn:incoming>Flow_1ighzoc</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:endEvent id="Event_0myvt14" name="Order Cancelled">
-      <bpmn:incoming>Flow_1jicsfy</bpmn:incoming>
-      <bpmn:incoming>Flow_0679nkx</bpmn:incoming>
-    </bpmn:endEvent>
     <bpmn:serviceTask id="Activity_03un7ou" name="calculate battery size based on consumption load profile" implementation="##unspecified">
       <bpmn:extensionElements>
         <zeebe:taskDefinition type="create-offer" />
@@ -129,7 +125,7 @@
       <bpmn:outgoing>Flow_1w0k1px</bpmn:outgoing>
       <bpmn:outgoing>Flow_08nzmv1</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_1jicsfy" name="No" sourceRef="Gateway_048t3y6" targetRef="Event_0myvt14">
+    <bpmn:sequenceFlow id="Flow_1jicsfy" name="No" sourceRef="Gateway_048t3y6" targetRef="Activity_0o8rejj">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=offerStatus = "rejected"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_1w0k1px" name="Yes" sourceRef="Gateway_048t3y6" targetRef="Activity_0zxsic0">
@@ -193,7 +189,7 @@
     <bpmn:sequenceFlow id="Flow_043jkvp" name="No" sourceRef="Gateway_0zy1rnc" targetRef="Activity_0u8m6k1">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=reminderSent = "false"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_0679nkx" name="Yes" sourceRef="Gateway_0zy1rnc" targetRef="Event_0myvt14">
+    <bpmn:sequenceFlow id="Flow_0679nkx" name="Yes" sourceRef="Gateway_0zy1rnc" targetRef="Activity_0o8rejj">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=reminderSent = "true"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:boundaryEvent id="Event_1ye6nct" attachedToRef="Activity_03un7ou">
@@ -217,6 +213,18 @@
       <bpmn:incoming>Flow_1e3jjx4</bpmn:incoming>
       <bpmn:outgoing>Flow_0fkmfng</bpmn:outgoing>
     </bpmn:sendTask>
+    <bpmn:endEvent id="Event_0myvt14" name="Order Cancelled">
+      <bpmn:incoming>Flow_1k4b3hz</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:serviceTask id="Activity_0o8rejj" name="Compensate Offer Creation">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="compensate-offer-creation" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1jicsfy</bpmn:incoming>
+      <bpmn:incoming>Flow_0679nkx</bpmn:incoming>
+      <bpmn:outgoing>Flow_1k4b3hz</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:sequenceFlow id="Flow_1k4b3hz" sourceRef="Activity_0o8rejj" targetRef="Event_0myvt14" />
   </bpmn:process>
   <bpmn:message id="Message_22bko37" name="Start_Sales_Flow">
     <bpmn:extensionElements>
@@ -236,12 +244,6 @@
         <dc:Bounds x="1472" y="169" width="36" height="36" />
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1458" y="212" width="65" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0myvt14_di" bpmnElement="Event_0myvt14" bioc:stroke="#831311" bioc:fill="#ffcdd2" color:background-color="#ffcdd2" color:border-color="#831311">
-        <dc:Bounds x="1192" y="402" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1170" y="445" width="81" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_11s6syy_di" bpmnElement="Activity_03un7ou">
@@ -298,6 +300,15 @@
         <dc:Bounds x="300" y="310" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1cdk2ev_di" bpmnElement="Event_0myvt14" bioc:stroke="#831311" bioc:fill="#ffcdd2" color:background-color="#ffcdd2" color:border-color="#831311">
+        <dc:Bounds x="1282" y="472" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1260" y="515" width="81" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_04jcmo0_di" bpmnElement="Activity_0o8rejj">
+        <dc:Bounds x="1160" y="270" width="100" height="80" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1f1nhfe_di" bpmnElement="Event_1ye6nct">
         <dc:Bounds x="252" y="209" width="36" height="36" />
       </bpmndi:BPMNShape>
@@ -313,9 +324,9 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1jicsfy_di" bpmnElement="Flow_1jicsfy">
         <di:waypoint x="1210" y="212" />
-        <di:waypoint x="1210" y="402" />
+        <di:waypoint x="1210" y="270" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1218" y="304" width="15" height="14" />
+          <dc:Bounds x="1240" y="398" width="15" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1w0k1px_di" bpmnElement="Flow_1w0k1px">
@@ -381,11 +392,9 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0679nkx_di" bpmnElement="Flow_0679nkx">
         <di:waypoint x="1055" y="310" />
-        <di:waypoint x="1140" y="310" />
-        <di:waypoint x="1140" y="420" />
-        <di:waypoint x="1192" y="420" />
+        <di:waypoint x="1160" y="310" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1142" y="359" width="18" height="14" />
+          <dc:Bounds x="1140" y="312" width="18" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1e3jjx4_di" bpmnElement="Flow_1e3jjx4">
@@ -402,6 +411,11 @@
       <bpmndi:BPMNEdge id="Flow_0fkmfng_di" bpmnElement="Flow_0fkmfng">
         <di:waypoint x="400" y="350" />
         <di:waypoint x="440" y="350" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1k4b3hz_di" bpmnElement="Flow_1k4b3hz">
+        <di:waypoint x="1210" y="350" />
+        <di:waypoint x="1210" y="490" />
+        <di:waypoint x="1282" y="490" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
