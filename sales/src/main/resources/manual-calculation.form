@@ -1,0 +1,51 @@
+{
+  "components": [
+    {
+      "text": "# Manual battery calculation needed\n\nAutomatic calculation failed based on user input, please select the battery size manually\n\n### User submitted load profile:",
+      "type": "text",
+      "id": "Field_166ylva"
+    },
+    {
+      "label": "Consumption",
+      "type": "textfield",
+      "id": "Field_1nvjb80",
+      "key": "loadProfileConsumption",
+      "properties": {}
+    },
+    {
+      "label": "Production",
+      "type": "textfield",
+      "id": "Field_1f2cppx",
+      "key": "loadProfileProduction"
+    },
+    {
+      "values": [
+        {
+          "label": "Small",
+          "value": "small"
+        },
+        {
+          "label": "Medium",
+          "value": "medium"
+        },
+        {
+          "label": "Large",
+          "value": "large"
+        }
+      ],
+      "label": "Choose battery size",
+      "type": "select",
+      "id": "Field_1ilawbj",
+      "key": "batterySizeRecommendation"
+    }
+  ],
+  "type": "default",
+  "id": "Form_0j88bpg",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.1.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.8.0"
+  },
+  "schemaVersion": 7
+}

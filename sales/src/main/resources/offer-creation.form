@@ -7,6 +7,13 @@
       "properties": {}
     },
     {
+      "label": "Calculated battery size",
+      "type": "textfield",
+      "id": "Field_16a2uzq",
+      "key": "batterySizeRecommendation",
+      "disabled": true
+    },
+    {
       "label": "Email Content",
       "type": "textfield",
       "id": "Field_0me45bg",

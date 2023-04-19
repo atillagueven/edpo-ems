@@ -5,7 +5,6 @@ import ch.unisg.ems.sales.domain.OfferReply;
 import ch.unisg.ems.sales.flow.OfferFlowContext;
 import ch.unisg.ems.sales.persistence.OfferRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.util.JSONPObject;
 import io.camunda.zeebe.client.ZeebeClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -21,7 +20,7 @@ import java.util.UUID;
 @Component
 public class MessageListener {
 
-    private final String salesTopic = "sales-service";
+    private final String salesTopic = "ems-sales";
 
     @Autowired
     private OfferRepository offerRepository;
@@ -45,13 +44,11 @@ public class MessageListener {
             offerRequested(messagePayload);
         }
         else if ("ClientAnswerReceivedEvent".equals(messageType)) {
-            paymentReceived(messagePayload);
+            clientAnswerReceived(messagePayload);
         }
         else {
             System.out.println("Ignored message of type " + salesTopic );
         }
-
-
     }
 
     @Transactional
@@ -62,13 +59,13 @@ public class MessageListener {
 
             offerRepository.save(offer);
 
-
             String traceId = UUID.randomUUID().toString();
             OfferFlowContext context = new OfferFlowContext();
             context.setOfferId(offer.getId());
             context.setTraceId(traceId);
             context.setOfferMessage("");
-            context.setLoadProfile(offer.getLoadProfile());
+            context.setLoadProfileConsumption(offer.getLoadProfileConsumption());
+            context.setLoadProfileProduction(offer.getLoadProfileProduction());
             context.setOfferAccepted(false);
             context.setNewOfferRequested(false);
             context.setReminderSent(false);
@@ -88,10 +85,8 @@ public class MessageListener {
     }
 
     @Transactional
-    public void paymentReceived(String messagePayload) throws Exception {
-        // Here you would maybe we should read something from the payload:
+    public void clientAnswerReceived(String messagePayload) throws Exception {
         System.out.println("Payment received: " + messagePayload);
-
 
         OfferReply offerReply = new OfferReply(messagePayload);
 

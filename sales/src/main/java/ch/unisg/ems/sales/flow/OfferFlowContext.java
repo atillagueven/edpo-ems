@@ -17,7 +17,11 @@ public class OfferFlowContext {
 
     @Getter
     @Setter
-    private Integer loadProfile;
+    private Integer loadProfileConsumption;
+
+    @Getter
+    @Setter
+    private Integer loadProfileProduction;
 
     @Getter
     @Setter
@@ -40,7 +44,8 @@ public class OfferFlowContext {
         context.traceId = (String) values.get("traceId");
         context.offerId = (String) values.get("offerId");
         context.offerMessage = (String) values.get("offerMessage");
-        context.loadProfile = Integer.parseInt(values.get("loadProfile").toString());
+        context.loadProfileConsumption = Integer.parseInt(values.get("loadProfileConsumption").toString());
+        context.loadProfileProduction = Integer.parseInt(values.get("loadProfileProduction").toString());
         context.offerAccepted = Boolean.parseBoolean(values.get("offerAccepted").toString());
         context.newOfferRequested = Boolean.parseBoolean(values.get("newOfferRequested").toString());
         context.reminderSent = Boolean.parseBoolean(values.get("reminderSent").toString());
@@ -52,7 +57,8 @@ public class OfferFlowContext {
         map.put("traceId", traceId);
         map.put("offerId", offerId);
         map.put("offerMessage", offerMessage);
-        map.put("loadProfile", loadProfile.toString());
+        map.put("loadProfileConsumption", loadProfileConsumption.toString());
+        map.put("loadProfileProduction", loadProfileProduction.toString());
         map.put("offerAccepted", offerAccepted.toString());
         map.put("newOfferRequested", newOfferRequested.toString());
         map.put("reminderSent", reminderSent.toString());

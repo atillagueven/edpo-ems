@@ -15,7 +15,7 @@ public class Order {
 
     private String customerEmail;
     private String customerName;
-    private Integer loadProfile;
+    private String batterySize;
 
     public Order() {}
 
@@ -26,7 +26,7 @@ public class Order {
         this.offerId = order.getOfferId();
         this.customerName = order.customerName;
         this.customerEmail = order.customerEmail;
-        this.loadProfile = order.loadProfile;
+        this.batterySize = order.batterySize;
     }
 
     public String getOfferId() {
@@ -54,11 +54,11 @@ public class Order {
         this.customerName = customerName;
     }
 
-    public Integer getLoadProfile() {
-        return loadProfile;
+    public String getBatterySize() {
+        return batterySize;
     }
 
-    public void setLoadProfile(Integer loadProfile) {
-        this.loadProfile = loadProfile;
+    public void setBatterySize(String batterySize) {
+        this.batterySize = batterySize;
     }
 }

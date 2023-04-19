@@ -37,7 +37,7 @@ public class SalesApiController {
         }
 
         // wrap into a proper message for Kafka including a header
-        ProducerRecord<String, String> record = new ProducerRecord<String, String>("sales-service", jsonMessage);
+        ProducerRecord<String, String> record = new ProducerRecord<String, String>("ems-sales", jsonMessage);
         record.headers().add("type", "OfferRequestedEvent".getBytes());
 
         // and send it
@@ -57,7 +57,7 @@ public class SalesApiController {
         }
 
         // wrap into a proper message for Kafka including a header
-        ProducerRecord<String, String> record = new ProducerRecord<String, String>("sales-service", jsonMessage);
+        ProducerRecord<String, String> record = new ProducerRecord<String, String>("ems-sales", jsonMessage);
         record.headers().add("type", "ClientAnswerReceivedEvent".getBytes());
 
         // and send it

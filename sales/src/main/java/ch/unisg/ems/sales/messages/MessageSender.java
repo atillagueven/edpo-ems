@@ -37,10 +37,6 @@ public class MessageSender {
             // avoid too much magic and transform ourselves
             String jsonMessage = objectMapper.writeValueAsString(m);
 
-            // wrap into a proper message for Kafka including a header
-//            ProducerRecord<String, String> record = new ProducerRecord<String, String>("ems-sales", jsonMessage);
-//            record.headers().add("type", m.getType().getBytes());
-
             byte[] messageBytes = jsonMessage.getBytes(StandardCharsets.UTF_8);
             ProducerRecord<String, byte[]> record = new ProducerRecord<String, byte[]>("ems-sales", messageBytes);
             record.headers().add("type", m.getType().getBytes());
@@ -56,10 +52,6 @@ public class MessageSender {
         try {
             // avoid too much magic and transform ourselves
             String jsonMessage = objectMapper.writeValueAsString(m);
-
-            // wrap into a proper message for Kafka including a header
-//            ProducerRecord<String, String> record = new ProducerRecord<String, String>("ems-sales", jsonMessage);
-//            record.headers().add("type", m.getType().getBytes());
 
             byte[] messageBytes = jsonMessage.getBytes(StandardCharsets.UTF_8);
             ProducerRecord<String, byte[]> record = new ProducerRecord<String, byte[]>(topic, messageBytes);

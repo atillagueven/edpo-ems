@@ -48,17 +48,22 @@ export default {
   data() {
     return {
       appointmentDate: null,
-      snackbar: false
+      snackbar: false,
+      offerId: "",
     }
   },
   created() {
 
   },
   mounted() {
+    let url = new URL(window.location.href)
+    let id = url.searchParams.get("id")
+    this.offerId = id
   },
   methods: {
     makeAppointment() {
       let postData = {
+        offerId: this.offerId,
         appointmentDate: this.appointmentDate
       }
 
@@ -68,7 +73,7 @@ export default {
         .post('http://localhost:8081/api/inventory/appointment-reply', postData)
         .then((response) => {
           console.log(response)
-          this.snackbar = false
+          this.snackbar = true
         })
         .catch((err) => {
           console.log(err)

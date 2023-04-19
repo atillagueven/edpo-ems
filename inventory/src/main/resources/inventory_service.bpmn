@@ -85,7 +85,7 @@
       <bpmn:outgoing>Flow_1l9oavn</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:endEvent id="inventory_process_finished" name="Inventory Process Finished">
-      <bpmn:incoming>Flow_1l9oavn</bpmn:incoming>
+      <bpmn:incoming>Flow_005ixcr</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_1s4okds" sourceRef="Event_1os0uqb" targetRef="Activity_0m7ju6e" />
     <bpmn:sequenceFlow id="Flow_1mq4qhr" sourceRef="Activity_0m7ju6e" targetRef="Event_15tmplw" />
@@ -93,7 +93,15 @@
     <bpmn:sequenceFlow id="Flow_0561gsd" sourceRef="Activity_0lm993z" targetRef="Activity_0n20zh0" />
     <bpmn:sequenceFlow id="Flow_1rtdkwp" sourceRef="Activity_0n20zh0" targetRef="Activity_1ka914u" />
     <bpmn:sequenceFlow id="Flow_16dsiwv" sourceRef="Activity_1ka914u" targetRef="Activity_05blutf" />
-    <bpmn:sequenceFlow id="Flow_1l9oavn" sourceRef="Activity_05blutf" targetRef="inventory_process_finished" />
+    <bpmn:sequenceFlow id="Flow_1l9oavn" sourceRef="Activity_05blutf" targetRef="Activity_1hgjsf7" />
+    <bpmn:sequenceFlow id="Flow_005ixcr" sourceRef="Activity_1hgjsf7" targetRef="inventory_process_finished" />
+    <bpmn:sendTask id="Activity_1hgjsf7" name="publish installation-complete event">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="installation-complete" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1l9oavn</bpmn:incoming>
+      <bpmn:outgoing>Flow_005ixcr</bpmn:outgoing>
+    </bpmn:sendTask>
   </bpmn:process>
   <bpmn:message id="Message_1bplfrh" name="ClientAppointmentReceivedEvent">
     <bpmn:extensionElements>
@@ -102,9 +110,11 @@
   </bpmn:message>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="inventory-service">
-      <bpmndi:BPMNShape id="Activity_0m7ju6e_di" bpmnElement="Activity_0m7ju6e">
-        <dc:Bounds x="290" y="80" width="100" height="80" />
-        <bpmndi:BPMNLabel />
+      <bpmndi:BPMNShape id="BPMNShape_10knxg2" bpmnElement="Event_1os0uqb" bioc:stroke="#5b176d" bioc:fill="#e1bee7" color:background-color="#e1bee7" color:border-color="#5b176d">
+        <dc:Bounds x="172" y="102" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="154" y="145" width="73" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0uwbpso_di" bpmnElement="Event_15tmplw">
         <dc:Bounds x="432" y="102" width="36" height="36" />
@@ -120,32 +130,34 @@
         <dc:Bounds x="670" y="80" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1ub4tdg_di" bpmnElement="Activity_1ka914u">
-        <dc:Bounds x="840" y="80" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_05blutf_di" bpmnElement="Activity_05blutf">
-        <dc:Bounds x="1020" y="80" width="100" height="80" />
+      <bpmndi:BPMNShape id="Activity_0m7ju6e_di" bpmnElement="Activity_0m7ju6e">
+        <dc:Bounds x="280" y="80" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_0gfnjn1_di" bpmnElement="inventory_process_finished" bioc:stroke="#5b176d" bioc:fill="#e1bee7" color:background-color="#e1bee7" color:border-color="#5b176d">
-        <dc:Bounds x="1192" y="102" width="36" height="36" />
+        <dc:Bounds x="1252" y="102" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1169" y="145" width="89" height="27" />
+          <dc:Bounds x="1229" y="145" width="89" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_10knxg2" bpmnElement="Event_1os0uqb" bioc:stroke="#5b176d" bioc:fill="#e1bee7" color:background-color="#e1bee7" color:border-color="#5b176d">
-        <dc:Bounds x="172" y="102" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="154" y="145" width="73" height="14" />
-        </bpmndi:BPMNLabel>
+      <bpmndi:BPMNShape id="Activity_1ub4tdg_di" bpmnElement="Activity_1ka914u">
+        <dc:Bounds x="830" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1gm34cv_di" bpmnElement="Activity_1hgjsf7">
+        <dc:Bounds x="1110" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_05blutf_di" bpmnElement="Activity_05blutf">
+        <dc:Bounds x="970" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_1s4okds_di" bpmnElement="Flow_1s4okds">
         <di:waypoint x="208" y="120" />
-        <di:waypoint x="290" y="120" />
+        <di:waypoint x="280" y="120" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1mq4qhr_di" bpmnElement="Flow_1mq4qhr">
-        <di:waypoint x="390" y="120" />
+        <di:waypoint x="380" y="120" />
         <di:waypoint x="432" y="120" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1t880d9_di" bpmnElement="Flow_1t880d9">
@@ -158,15 +170,19 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1rtdkwp_di" bpmnElement="Flow_1rtdkwp">
         <di:waypoint x="770" y="120" />
-        <di:waypoint x="840" y="120" />
+        <di:waypoint x="830" y="120" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_16dsiwv_di" bpmnElement="Flow_16dsiwv">
-        <di:waypoint x="940" y="120" />
-        <di:waypoint x="1020" y="120" />
+        <di:waypoint x="930" y="120" />
+        <di:waypoint x="970" y="120" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1l9oavn_di" bpmnElement="Flow_1l9oavn">
-        <di:waypoint x="1120" y="120" />
-        <di:waypoint x="1192" y="120" />
+        <di:waypoint x="1070" y="120" />
+        <di:waypoint x="1110" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_005ixcr_di" bpmnElement="Flow_005ixcr">
+        <di:waypoint x="1210" y="120" />
+        <di:waypoint x="1252" y="120" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

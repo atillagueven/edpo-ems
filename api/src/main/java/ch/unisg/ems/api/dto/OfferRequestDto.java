@@ -17,6 +17,9 @@ public class OfferRequestDto implements Serializable {
     private String customerEmail;
 
     @Getter
-    private Integer loadProfile;
+    private Integer loadProfileConsumption;
+
+    @Getter
+    private Integer loadProfileProduction;
 
 }

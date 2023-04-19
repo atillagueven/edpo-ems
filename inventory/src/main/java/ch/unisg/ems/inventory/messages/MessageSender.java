@@ -9,6 +9,8 @@ import org.springframework.kafka.config.TopicBuilder;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
+import java.nio.charset.StandardCharsets;
+
 /**
  * Helper to send messages, currently nailed to Kafka, but could also send via AMQP (e.g. RabbitMQ) or
  * any other transport easily
@@ -19,7 +21,7 @@ public class MessageSender {
     public static final String TOPIC_NAME = "offer-received-topic";
 
     @Autowired
-    private KafkaTemplate<String, String> kafkaTemplate;
+    private KafkaTemplate<String, byte[]> kafkaTemplate;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -38,8 +40,8 @@ public class MessageSender {
             // ProducerRecord<String, String> record = new ProducerRecord<String, String>("ems-sales", jsonMessage);
             // record.headers().add("type", m.getType().getBytes());
 
-            // byte[] messageBytes = jsonMessage.getBytes(StandardCharsets.UTF_8);
-            ProducerRecord<String, String> record = new ProducerRecord<String, String>("ems-sales", jsonMessage);
+             byte[] messageBytes = jsonMessage.getBytes(StandardCharsets.UTF_8);
+            ProducerRecord<String, byte[]> record = new ProducerRecord<String, byte[]>("ems-inventory", messageBytes);
             record.headers().add("type", m.getType().getBytes());
 
             // and send it
@@ -58,8 +60,8 @@ public class MessageSender {
 //            ProducerRecord<String, String> record = new ProducerRecord<String, String>("ems-notification", jsonMessage);
 //            record.headers().add("type", m.getType().getBytes());
 
-            //byte[] messageBytes = jsonMessage.getBytes(StandardCharsets.UTF_8);
-            ProducerRecord<String, String> record = new ProducerRecord<String, String>(topic, jsonMessage);
+            byte[] messageBytes = jsonMessage.getBytes(StandardCharsets.UTF_8);
+            ProducerRecord<String, byte[]> record = new ProducerRecord<String, byte[]>(topic, messageBytes);
             record.headers().add("type", m.getType().getBytes());
 
             // and send it

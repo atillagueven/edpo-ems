@@ -3,6 +3,7 @@ package ch.unisg.ems.inventory.messages;
 import ch.unisg.ems.inventory.domain.AppointmentReply;
 import ch.unisg.ems.inventory.domain.Order;
 import ch.unisg.ems.inventory.flow.InventoryFlowContext;
+import ch.unisg.ems.inventory.persistence.OrderRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.camunda.zeebe.client.ZeebeClient;
@@ -22,6 +23,8 @@ public class MessageListener {
     private final String salesTopic = "ems-sales";
     private final String inventoryTopic = "ems-inventory";
 
+    @Autowired
+    private OrderRepository orderRepository;
 
     @Qualifier("zeebeClientLifecycle")
     @Autowired
@@ -34,7 +37,7 @@ public class MessageListener {
     private ObjectMapper objectMapper;
 
     @Transactional
-    @KafkaListener(id = "sales", topics = salesTopic)
+    @KafkaListener(id = "sales-inventory", topics = salesTopic)
     public void salesMessageReceived(String messagePayload, @Header("type") String messageType) throws Exception{
         System.out.println("Message received: ems-sales" );
 
@@ -45,7 +48,7 @@ public class MessageListener {
         }
 
         else {
-            System.out.println("Ignored message of type " + salesTopic);
+            System.out.println("Ignored message of type " + messageType);
         }
 
 
@@ -61,10 +64,8 @@ public class MessageListener {
             appointmentReceived(messagePayload);
         }
         else {
-            System.out.println("Ignored message of type " + inventoryTopic);
+            System.out.println("Ignored message of type " + messagePayload);
         }
-
-
     }
 
 
@@ -73,17 +74,20 @@ public class MessageListener {
         System.out.println("New order received: " + messagePayload);
         try {
             JsonNode message = objectMapper.readTree(messagePayload);
-            Order order = new Order(message.get("data").toString());
+            Order order = new Order();
+            order.setOfferId(message.get("data").get("offerId").asText());
+            order.setBatterySize(message.get("data").get("batterySize").asText());
+            order.setCustomerName(message.get("data").get("clientName").asText());
+            order.setCustomerEmail(message.get("data").get("clientEmail").asText());
 
 
             String traceId = UUID.randomUUID().toString();
             InventoryFlowContext context = new InventoryFlowContext();
             context.setOfferId(order.getOfferId());
             context.setTraceId(traceId);
-            context.setOfferMessage("");
-            context.setLoadProfile(order.getLoadProfile());
-            context.setOfferAccepted(false);
+            context.setBatterySize(order.getBatterySize());
 
+            orderRepository.save(order);
 
             zeebe.newCreateInstanceCommand() //
                     .bpmnProcessId("inventory-service") //
@@ -98,7 +102,6 @@ public class MessageListener {
 
     @Transactional
     public void appointmentReceived(String messagePayload) throws Exception {
-        //Here you would maybe we should read something from the payload:
         System.out.println("Appointment received: " + messagePayload);
 
 
@@ -109,11 +112,11 @@ public class MessageListener {
 
         zeebe.newPublishMessageCommand() //
                 .messageName("ClientAppointmentReceivedEvent")
-                .correlationKey(appointmentReply.getAppointmentDate())
+                .correlationKey(appointmentReply.getOfferId())
                 .variables(newAppointment)
                 .send().join();
 
-        System.out.println("Correlated " + appointmentReply.getAppointmentDate());
+        System.out.println("Appointment date correlated for offer " + appointmentReply.getOfferId());
 
     }
 

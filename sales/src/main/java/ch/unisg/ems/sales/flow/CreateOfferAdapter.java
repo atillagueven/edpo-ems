@@ -30,27 +30,31 @@ public class CreateOfferAdapter {
         Offer offer = offerRepository.findById(context.getOfferId()).get();
 
         String recommendedBatterySize = "";
-        Integer consumption = context.getLoadProfile();
+        int consumption = context.getLoadProfileConsumption();
+        int production = context.getLoadProfileProduction();
 
         if(consumption < 0) {
             System.out.println("Battery size could not be calculated");
             throw new ZeebeBpmnError("Error_BatteryCalculationError", "Battery size could not be calculated");
         }
 
-        if (consumption > 500) {
-            recommendedBatterySize = "Large";
-        } else if (consumption > 200) {
-            recommendedBatterySize = "Medium";
+        int energySurplus = consumption - production;
+
+        if (energySurplus > 500) {
+            recommendedBatterySize = "large";
+        } else if (energySurplus > 200) {
+            recommendedBatterySize = "medium";
+        } else if (energySurplus >= 0) {
+            recommendedBatterySize = "small";
         } else {
-            recommendedBatterySize = "Small";
+            recommendedBatterySize = "none";
         }
 
         offer.setBatterySize(recommendedBatterySize);
         offerRepository.save(offer);
 
         HashMap<String, String> newVariables = new HashMap<>();
-        newVariables.put("batterySizeRecomendation",recommendedBatterySize);
-
+        newVariables.put("batterySizeRecommendation",recommendedBatterySize);
 
         client.newCompleteCommand(job.getKey())
                 .variables(newVariables)

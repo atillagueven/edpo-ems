@@ -1,10 +1,7 @@
 package ch.unisg.ems.sales.domain;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,7 +17,8 @@ public class Offer {
 
     private String customerEmail;
     private String customerName;
-    private Integer loadProfile;
+    private Integer loadProfileConsumption;
+    private Integer loadProfileProduction;
 
     private String batterySize;
 
@@ -33,7 +31,8 @@ public class Offer {
         this.id = UUID.randomUUID().toString();
         this.customerName = offer.customerName;
         this.customerEmail = offer.customerEmail;
-        this.loadProfile = offer.loadProfile;
+        this.loadProfileConsumption = offer.loadProfileConsumption;
+        this.loadProfileProduction = offer.loadProfileProduction;
         this.batterySize = offer.batterySize;
     }
 
@@ -62,12 +61,20 @@ public class Offer {
         this.customerName = customerName;
     }
 
-    public Integer getLoadProfile() {
-        return loadProfile;
+    public Integer getLoadProfileConsumption() {
+        return loadProfileConsumption;
     }
 
-    public void setLoadProfile(Integer loadProfile) {
-        this.loadProfile = loadProfile;
+    public void setLoadProfileConsumption(Integer loadProfile) {
+        this.loadProfileConsumption = loadProfile;
+    }
+
+    public Integer getLoadProfileProduction() {
+        return loadProfileProduction;
+    }
+
+    public void setLoadProfileProduction(Integer loadProfileProduction) {
+        this.loadProfileProduction = loadProfileProduction;
     }
 
     public String getBatterySize() {

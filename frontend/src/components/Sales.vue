@@ -25,10 +25,15 @@
                   </v-col>
                 </v-row>
                 <v-row>
-                <v-col>
-                  <v-text-field v-model="loadProfile" type="number" label="Average engergy consumption in KWH"></v-text-field>
-                </v-col>
-              </v-row>
+                  <v-col>
+                    <v-text-field v-model="loadProfileConsumption" type="number" label="Average energy consumption in KWH"></v-text-field>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col>
+                    <v-text-field v-model="loadProfileProduction" type="number" label="Average energy production in KWH"></v-text-field>
+                  </v-col>
+                </v-row>
                 <v-row>
                   <v-col>
                     <v-btn @click="requestSalesOffer" block color="primary">Request Offer</v-btn>
@@ -57,9 +62,11 @@ export default {
   name: "Sales",
   data() {
     return {
+      date: null,
       customerName: "valentin",
       customerEmail: "valentin.berger@student.unisg.ch",
-      loadProfile: 0,
+      loadProfileConsumption: 0,
+      loadProfileProduction: 0,
       snackbar: false
     }
   },
@@ -73,7 +80,8 @@ export default {
       let postData = {
         customerName: this.customerName,
         customerEmail: this.customerEmail,
-        loadProfile: this.loadProfile,
+        loadProfileConsumption: this.loadProfileConsumption,
+        loadProfileProduction: this.loadProfileProduction,
       }
 
       console.log(postData)

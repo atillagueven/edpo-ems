@@ -17,7 +17,7 @@ public class InventoryFlowContext {
 
     @Getter
     @Setter
-    private Integer loadProfile;
+    private String batterySize;
 
     @Getter
     @Setter
@@ -39,11 +39,7 @@ public class InventoryFlowContext {
         InventoryFlowContext context = new InventoryFlowContext();
         context.traceId = (String) values.get("traceId");
         context.offerId = (String) values.get("offerId");
-        context.offerMessage = (String) values.get("offerMessage");
-        context.loadProfile = Integer.parseInt(values.get("loadProfile").toString());
-        context.offerAccepted = Boolean.parseBoolean(values.get("offerAccepted").toString());
-        context.newOfferRequested = Boolean.parseBoolean(values.get("newOfferRequested").toString());
-        context.reminderSent = Boolean.parseBoolean(values.get("reminderSent").toString());
+        context.batterySize = values.get("batterySize").toString();
         return context;
     }
 
@@ -51,12 +47,7 @@ public class InventoryFlowContext {
         HashMap<String, String> map = new HashMap<>();
         map.put("traceId", traceId);
         map.put("offerId", offerId);
-        map.put("offerMessage", offerMessage);
-        map.put("loadProfile", loadProfile.toString());
-        map.put("offerAccepted", offerAccepted.toString());
-        map.put("newOfferRequested", newOfferRequested.toString());
-        map.put("reminderSent", reminderSent.toString());
-
+        map.put("batterySize", batterySize.toString());
         return map;
     }
 

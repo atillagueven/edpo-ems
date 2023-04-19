@@ -39,7 +39,7 @@ public class OfferPlacedAdapter {
         messageSender.send(new Message<OfferPlacedEventPayload>(
                 "OrderPlacedEvent",
                 payload
-        ));
+        ),"ems-sales");
 
         client.newCompleteCommand(job.getKey()).send().join();
     }

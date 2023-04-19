@@ -61,7 +61,7 @@ public class MessageListener {
     public void salesMessageReceived(String messagePayload, @Header("type") String messageType) throws Exception {
 
         if("OrderPlacedEvent".equals(messageType)) {
-            initPayment(messagePayload);
+//            initPayment(messagePayload);
         }
         else {
             System.out.println("Ignored message of type " + messageType );
@@ -72,7 +72,7 @@ public class MessageListener {
     @KafkaListener(id = "inventory-payment", topics = inventoryTopic)
     public void inventoryMessageReceived(String messagePayload, @Header("type") String messageType) throws Exception {
 
-        if("PaymentStartedEvent".equals(messageType)) {
+        if("InstallationCompleteEvent".equals(messageType)) {
             initPayment(messagePayload);
         }
         else {
