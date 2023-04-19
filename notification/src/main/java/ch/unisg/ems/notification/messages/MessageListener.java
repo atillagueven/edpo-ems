@@ -42,10 +42,46 @@ public class MessageListener {
           notificationService.sendEmail(clientEmail, emailContent);
       } else if ("SendReminderToClientCommand".equals(messageType)) {
           System.out.println("Received message: " + messageType);
+          System.out.println("Received message: " + messageType);
+          JsonNode message = objectMapper.readTree(messageJson);
+          String offerId = message.get("data").get("offerId").asText();
+          String clientEmail = message.get("data").get("clientEmail").asText();
+          String clientName = message.get("data").get("clientName").asText();
+          String offerMessage = message.get("data").get("offerMessage").asText();
+
+          String emailContent = "Dear " + clientName + ",\n\n"
+                  + offerMessage + "\n\n"
+                  + "REMINDER \n"
+                  + "Please click on the following link to accept the offer:\n"
+                  + "http://localhost:3000/sales/offer-reply?id=" + offerId + "\n\n"
+                  + "Best regards,\n" + "EMS Team";
+
+          notificationService.sendEmail(clientEmail, emailContent);
       } else if ("SendInvoiceToClientCommand".equals(messageType)) {
           System.out.println("Received message: " + messageType);
+          System.out.println("Received message: " + messageType);
+          JsonNode message = objectMapper.readTree(messageJson);
+          String offerId = message.get("data").get("offerId").asText();
+          String clientEmail = message.get("data").get("clientEmail").asText();
+
+          String emailContent = "You have a new Invoice for order : "+ offerId +".\n"
+                  + "Please pay your invoice in the next 14 days.\n\n"
+                  + "Best regards,\n" + "EMS Team";
+
+          notificationService.sendEmail(clientEmail, emailContent);
+
       } else if ("SendInvoiceReminderToClientCommand".equals(messageType)) {
           System.out.println("Received message: " + messageType);
+          JsonNode message = objectMapper.readTree(messageJson);
+          String offerId = message.get("data").get("offerId").asText();
+          String clientEmail = message.get("data").get("clientEmail").asText();
+
+          String emailContent = "We noticed, that the there is still an outstanding invoice for you order : "+ offerId +".\n"
+                  + "Please pay your invoice in the next 14 days.\n\n"
+                  + "Best regards,\n" + "EMS Team";
+
+          notificationService.sendEmail(clientEmail, emailContent);
+
       } else if ("SendAssemblyInfoToClientCommand".equals(messageType)) {
           System.out.println("Received message: " + messageType);
 
@@ -64,7 +100,15 @@ public class MessageListener {
 
           notificationService.sendEmail(clientEmail, emailContent);
 
-      } else {
+      } else if ("SendNotificationToEngineerCommand".equals(messageType)) {
+          System.out.println("Received message: " + messageType);
+          String emailContent = "Dear Engineer\n\n"
+                  + "There is a new task for you.\n"
+                  + "Best regards,\n" + "EMS Team";
+          notificationService.sendEmail("engineer@ems.ch", emailContent);
+
+      }
+      else {
             System.out.println("Received unknown message: " + messageType);
       }
   }

@@ -27,21 +27,10 @@ public class SendNotificationToEngineerAdapter {
     public void sendOfferToClient(JobClient client, ActivatedJob job) {
         System.out.println("Sending offer to engineer: ");
 
-//        OfferFlowContext context = OfferFlowContext.fromMap(job.getVariablesAsMap());
-//        Offer offer = offerRepository.findById(context.getOfferId()).get();
-//
-//        SendOfferToClientCommandPayload payload = new SendOfferToClientCommandPayload();
-//        payload.setOfferId(context.getOfferId());
-//        payload.setClientName(offer.getCustomerName());
-//        payload.setClientEmail(offer.getCustomerEmail());
-//        payload.setOfferMessage(context.getOfferMessage());
-//
-//        System.out.println("Sending offer to client: " + payload);
-//
-//        messageSender.send(new Message<SendOfferToClientCommandPayload>(
-//                "SendOfferToClientCommand",
-//                payload
-//        ), "ems-notification");
+       messageSender.send(new Message<String>(
+                "SendNotificationToEngineerCommand",
+                "Offer needs to checked by engineer"
+        ), "ems-notification");
 
         client.newCompleteCommand(job.getKey()).send().join();
     }

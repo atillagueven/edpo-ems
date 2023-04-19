@@ -39,7 +39,7 @@ public class SendReminderToClientAdapter {
         System.out.println("Sending offer to client: " + payload);
 
         messageSender.send(new Message<SendOfferToClientCommandPayload>(
-                "SendOfferToClientCommand",
+                "SendReminderToClientCommand",
                 payload
         ), "ems-notification");
 

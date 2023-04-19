@@ -301,9 +301,9 @@
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1cdk2ev_di" bpmnElement="Event_0myvt14" bioc:stroke="#831311" bioc:fill="#ffcdd2" color:background-color="#ffcdd2" color:border-color="#831311">
-        <dc:Bounds x="1282" y="472" width="36" height="36" />
+        <dc:Bounds x="1192" y="402" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1260" y="515" width="81" height="14" />
+          <dc:Bounds x="1170" y="445" width="81" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_04jcmo0_di" bpmnElement="Activity_0o8rejj">
@@ -414,8 +414,7 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1k4b3hz_di" bpmnElement="Flow_1k4b3hz">
         <di:waypoint x="1210" y="350" />
-        <di:waypoint x="1210" y="490" />
-        <di:waypoint x="1282" y="490" />
+        <di:waypoint x="1210" y="402" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
