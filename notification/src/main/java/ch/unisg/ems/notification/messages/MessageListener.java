@@ -36,7 +36,7 @@ public class MessageListener {
           String emailContent = "Dear " + clientName + ",\n\n"
                   + offerMessage + "\n\n"
                   + "Please click on the following link to accept the offer:\n"
-                  + "http://localhost:3001/sales/offer-reply?id=" + offerId + "\n\n"
+                  + "http://localhost:3000/sales/offer-reply?id=" + offerId + "\n\n"
                   + "Best regards,\n" + "EMS Team";
 
           notificationService.sendEmail(clientEmail, emailContent);
@@ -59,7 +59,7 @@ public class MessageListener {
           String emailContent = "Dear " + clientName + ",\n\n"
                   + offerMessage + "\n\n"
                   + "Please click on the following link to arrange an appointment:\n"
-                  + "http://localhost:3001/inventory/offer-reply?id=" + offerId + "\n\n"
+                  + "http://localhost:3000/inventory?id=" + offerId + "\n\n"
                   + "Best regards,\n" + "EMS Team";
 
           notificationService.sendEmail(clientEmail, emailContent);
@@ -67,14 +67,6 @@ public class MessageListener {
       } else {
             System.out.println("Received unknown message: " + messageType);
       }
-
-//      if ("OrderPlacedEvent".equals(messageType) ||
-//              "PaymentReceivedEvent".equals(messageType) ||
-//              "GoodsShippedEvent".equals(messageType)) {
-//          JsonNode message = objectMapper.readTree(messageJson);
-//          String id = message.get("id").asText();
-//          notificationService.sendEmail(id, "New Order status: " + messageType.split("Event")[0]);
-//      }
   }
     
 }

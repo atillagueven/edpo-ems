@@ -1,7 +1,9 @@
 package ch.unisg.ems.inventory.messages;
 
 import ch.unisg.ems.inventory.domain.AppointmentReply;
+import ch.unisg.ems.inventory.domain.ComplementaryMaterialsReceivedDto;
 import ch.unisg.ems.inventory.domain.Order;
+import ch.unisg.ems.inventory.domain.PartsReceivedDto;
 import ch.unisg.ems.inventory.flow.InventoryFlowContext;
 import ch.unisg.ems.inventory.persistence.OrderRepository;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -45,9 +47,7 @@ public class MessageListener {
             orderReceived(messagePayload);
         } else if("appointmentReceived".equals(messageType)) {
             appointmentReceived(messagePayload);
-        }
-
-        else {
+        } else {
             System.out.println("Ignored message of type " + messageType);
         }
 
@@ -62,9 +62,12 @@ public class MessageListener {
 
         if ("ClientAppointmentReceivedEvent".equals(messageType)) {
             appointmentReceived(messagePayload);
-        }
-        else {
-            System.out.println("Ignored message of type " + messagePayload);
+        } else if("PartsReceivedEvent".equals(messageType)) {
+            partsReceived(messagePayload);
+        } else if("ComplementaryMaterialsReceivedEvent".equals(messageType)) {
+            complementaryMaterialsReceived(messagePayload);
+        } else {
+            System.out.println("Ignored message of type " + messageType);
         }
     }
 
@@ -86,6 +89,7 @@ public class MessageListener {
             context.setOfferId(order.getOfferId());
             context.setTraceId(traceId);
             context.setBatterySize(order.getBatterySize());
+            context.setPartsAvailable(false);
 
             orderRepository.save(order);
 
@@ -104,7 +108,6 @@ public class MessageListener {
     public void appointmentReceived(String messagePayload) throws Exception {
         System.out.println("Appointment received: " + messagePayload);
 
-
         AppointmentReply appointmentReply = new AppointmentReply(messagePayload);
 
         HashMap<String, String> newAppointment = new HashMap<>();
@@ -120,5 +123,40 @@ public class MessageListener {
 
     }
 
+    @Transactional
+    public void partsReceived(String messagePayload) throws Exception {
+        System.out.println("Parts received: " + messagePayload);
+
+        PartsReceivedDto partsReceivedDto = new PartsReceivedDto(messagePayload);
+
+        HashMap<String, String> newVariables = new HashMap<>();
+        newVariables.put("partsAvailable",partsReceivedDto.getPartsConfirmed().toString());
+
+        zeebe.newPublishMessageCommand() //
+                .messageName("PartsReceivedEvent")
+                .correlationKey(partsReceivedDto.getOfferId())
+                .variables(newVariables)
+                .send().join();
+
+        System.out.println("Parts received correlated for offer " + partsReceivedDto.getOfferId());
+    }
+
+    @Transactional
+    public void complementaryMaterialsReceived(String messagePayload) throws Exception {
+        System.out.println("Complementary materials received: " + messagePayload);
+
+        ComplementaryMaterialsReceivedDto complementaryMaterialsReceivedDto = new ComplementaryMaterialsReceivedDto(messagePayload);
+
+        HashMap<String, String> newVariables = new HashMap<>();
+        newVariables.put("complementaryMaterialsAvailable","true");
+
+        zeebe.newPublishMessageCommand() //
+                .messageName("ComplementaryMaterialsReceivedEvent")
+                .correlationKey(complementaryMaterialsReceivedDto.getOfferId())
+                .variables(newVariables)
+                .send().join();
+
+        System.out.println("Complementary materials received correlated for offer " + complementaryMaterialsReceivedDto.getOfferId());
+    }
 
 }

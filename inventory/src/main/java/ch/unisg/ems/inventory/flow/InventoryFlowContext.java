@@ -2,6 +2,7 @@ package ch.unisg.ems.inventory.flow;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.kafka.common.protocol.types.Field;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,11 +36,16 @@ public class InventoryFlowContext {
     @Setter
     private String offerMessage;
 
+    @Getter
+    @Setter
+    private Boolean partsAvailable;
+
     public static InventoryFlowContext fromMap(Map<String, Object> values) {
         InventoryFlowContext context = new InventoryFlowContext();
         context.traceId = (String) values.get("traceId");
         context.offerId = (String) values.get("offerId");
         context.batterySize = values.get("batterySize").toString();
+        context.partsAvailable = Boolean.parseBoolean(values.get("partsAvailable").toString());
         return context;
     }
 
@@ -48,6 +54,7 @@ public class InventoryFlowContext {
         map.put("traceId", traceId);
         map.put("offerId", offerId);
         map.put("batterySize", batterySize.toString());
+        map.put("partsAvailable", partsAvailable.toString());
         return map;
     }
 

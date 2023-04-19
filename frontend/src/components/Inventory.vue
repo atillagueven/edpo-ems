@@ -30,6 +30,42 @@
         </v-row>
       </v-col>
     </v-row>
+    <v-row>
+      <v-col>
+        <v-row>
+          <v-col cols="12" md="6">
+            <v-card>
+              <v-card-title class="my-3">
+                Confirm Parts
+              </v-card-title>
+              <v-card-text>
+                <v-row>
+                  <v-col>
+                    <v-btn @click="confirmParts" block color="primary">Confirm</v-btn>
+                  </v-col>
+                </v-row>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col cols="12" md="6">
+            <v-card>
+              <v-card-title class="my-3">
+                Confirm complementary Materials
+              </v-card-title>
+              <v-card-text>
+                <v-row>
+                  <v-col>
+                    <v-btn @click="confirmComplementaryMaterials" block color="primary">Confirm</v-btn>
+                  </v-col>
+                </v-row>
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-col>
+    </v-row>
     <v-snackbar
       color="success"
       v-model="snackbar"
@@ -78,7 +114,43 @@ export default {
         .catch((err) => {
           console.log(err)
         })
-    }
+    },
+    confirmParts() {
+      let postData = {
+        offerId: this.offerId,
+        partsConfirmed: true
+      }
+
+      console.log(postData)
+
+      axios
+        .post('http://localhost:8081/api/inventory/confirmParts', postData)
+        .then((response) => {
+          console.log(response)
+          this.snackbar = true
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    },
+    confirmComplementaryMaterials() {
+      let postData = {
+        offerId: this.offerId,
+        complementaryMaterialsConfirmed: true
+      }
+
+      console.log(postData)
+
+      axios
+        .post('http://localhost:8081/api/inventory/confirmComplementaryMaterials', postData)
+        .then((response) => {
+          console.log(response)
+          this.snackbar = true
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    },
   }
 }
 </script>
