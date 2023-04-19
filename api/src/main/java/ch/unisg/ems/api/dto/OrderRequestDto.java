@@ -10,6 +10,8 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class OrderRequestDto implements Serializable {
 
+
+    private String offerId;
     @Getter
     private String appointmentDate;
 

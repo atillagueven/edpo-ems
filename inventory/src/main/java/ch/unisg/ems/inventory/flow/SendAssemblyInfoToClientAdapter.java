@@ -31,7 +31,7 @@ public class SendAssemblyInfoToClientAdapter {
         payload.setOfferMessage("test");
         payload.setEmsSystemRecommendation("Standard");
 
-        System.out.println("Sending offer to client: " + payload);
+        System.out.println("Sending Assembly Information to client: " + payload);
 
         messageSender.send(new Message<SendAssemblyInfoToClientCommandPayload>(
                 "SendAssemblyInfoToClientCommand",
