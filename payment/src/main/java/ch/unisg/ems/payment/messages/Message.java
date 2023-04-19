@@ -8,7 +8,7 @@ public class Message<T> {
     // Cloud Events compliant
     private String type;
     private String id = UUID.randomUUID().toString(); // unique id of this message
-    private String source="Payment";
+    private String source="EMS Payment";
     private Date time = new Date();
     private T data;
     private String datacontenttype="application/json";

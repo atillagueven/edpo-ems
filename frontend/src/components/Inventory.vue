@@ -30,6 +30,13 @@
         </v-row>
       </v-col>
     </v-row>
+    <v-snackbar
+      color="success"
+      v-model="snackbar"
+      timeout="3000"
+    >
+      Request complete
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -40,7 +47,8 @@ export default {
   name: "Inventory",
   data() {
     return {
-      appointmentDate: null
+      appointmentDate: null,
+      snackbar: false
     }
   },
   created() {
@@ -60,6 +68,7 @@ export default {
         .post('http://localhost:8081/api/inventory/appointment-reply', postData)
         .then((response) => {
           console.log(response)
+          this.snackbar = false
         })
         .catch((err) => {
           console.log(err)

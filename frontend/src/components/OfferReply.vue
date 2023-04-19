@@ -35,6 +35,13 @@
         </v-row>
       </v-col>
     </v-row>
+    <v-snackbar
+      color="success"
+      v-model="snackbar"
+      timeout="3000"
+    >
+      Request complete
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -50,7 +57,8 @@ export default {
       message: "Request details about the load profile",
       offerAccepted: true,
       newOfferRequested: false,
-      offerId: ""
+      offerId: "",
+      snackbar: false
     }
   },
   created() {
@@ -79,6 +87,7 @@ export default {
         .post('http://localhost:8081/api/sales/answer-offer', postData)
         .then((response) => {
           console.log(response)
+          this.snackbar = true
         })
         .catch((err) => {
           console.log(err)

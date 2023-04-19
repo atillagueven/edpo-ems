@@ -40,6 +40,13 @@
         </v-row>
       </v-col>
     </v-row>
+    <v-snackbar
+      color="success"
+      v-model="snackbar"
+      timeout="3000"
+    >
+      Request complete
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -53,6 +60,7 @@ export default {
       customerName: "valentin",
       customerEmail: "valentin.berger@student.unisg.ch",
       loadProfile: 0,
+      snackbar: false
     }
   },
   created() {
@@ -74,6 +82,7 @@ export default {
         .post('http://localhost:8081/api/sales/request-offer', postData)
         .then((response) => {
           console.log(response)
+          this.snackbar = true
         })
         .catch((err) => {
           console.log(err)

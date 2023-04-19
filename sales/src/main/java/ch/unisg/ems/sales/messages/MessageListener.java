@@ -106,5 +106,4 @@ public class MessageListener {
         System.out.println("Correlated " + offerReply.getOfferId());
     }
 
-
 }

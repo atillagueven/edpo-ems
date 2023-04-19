@@ -1,10 +1,11 @@
-package ch.unisg.ems.sales.domain;
+package ch.unisg.ems.payment.domain;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
+
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,17 +25,18 @@ public class Offer {
 
     private String batterySize;
 
+    private String correlationId;
     public Offer() {}
 
     // Needs refactor
     public Offer(String json) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         Offer offer = objectMapper.readValue(json, Offer.class);
-        this.id = UUID.randomUUID().toString();
-        this.customerName = offer.customerName;
-        this.customerEmail = offer.customerEmail;
-        this.loadProfile = offer.loadProfile;
-        this.batterySize = offer.batterySize;
+        this.id = offer.id;
+//        this.customerName = offer.customerName;
+//        this.customerEmail = offer.customerEmail;
+//        this.loadProfile = offer.loadProfile;
+//        this.batterySize = offer.batterySize;
     }
 
     public String getId() {
@@ -76,5 +78,13 @@ public class Offer {
 
     public void setBatterySize(String batterySize) {
         this.batterySize = batterySize;
+    }
+
+    public String getCorrelationId() {
+        return correlationId;
+    }
+
+    public void setCorrelationId(String correlationId) {
+        this.correlationId = correlationId;
     }
 }

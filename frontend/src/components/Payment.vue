@@ -11,36 +11,17 @@
           <v-col cols="12" md="6">
             <v-card>
               <v-card-title class="my-3">
-                Start payment process
+                Mark payment as complete for invoice
               </v-card-title>
               <v-card-text>
                 <v-row>
                   <v-col>
-                    <v-text-field v-model="correlationId" label="Correlation Id"></v-text-field>
+                    <v-text-field v-model="correlationId" label="Invoice Id"></v-text-field>
                   </v-col>
                 </v-row>
                 <v-row>
                   <v-col>
-                    <v-btn @click="startPaymentProcess" block color="primary">Start process</v-btn>
-                  </v-col>
-                </v-row>
-              </v-card-text>
-            </v-card>
-          </v-col>
-          <v-col cols="12" md="6">
-            <v-card>
-              <v-card-title class="my-3">
-                Set payment confirmed
-              </v-card-title>
-              <v-card-text>
-                <v-row>
-                  <v-col>
-                    <v-text-field v-model="correlationId" label="Correlation Id"></v-text-field>
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col>
-                    <v-btn @click="markPaymentReceived" block color="primary">Start process</v-btn>
+                    <v-btn @click="startPaymentProcess" block color="primary">Confirm payment</v-btn>
                   </v-col>
                 </v-row>
               </v-card-text>
@@ -49,6 +30,13 @@
         </v-row>
       </v-col>
     </v-row>
+    <v-snackbar
+      color="success"
+      v-model="snackbar"
+      timeout="3000"
+    >
+      Request complete
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -60,7 +48,8 @@ export default {
   name: "Payment",
   data() {
     return {
-      correlationId: uuidv4()
+      correlationId: '',
+      snackbar: false
     }
   },
   created() {
@@ -71,16 +60,16 @@ export default {
   methods: {
     startPaymentProcess() {
       let postData = {
-        requester: "fabio",
-        correalationId: this.correlationId
+        invoiceId: this.correlationId
       }
 
       console.log(postData)
 
       axios
-        .post('http://localhost:8081/api/start-payment-process', postData)
+        .post('http://localhost:8081/api/payment/payment-received', postData)
         .then((response) => {
           console.log(response)
+          this.snackbar = true
         })
         .catch((err) => {
           console.log(err)

@@ -42,6 +42,10 @@ public class MessageListener {
           notificationService.sendEmail(clientEmail, emailContent);
       } else if ("SendReminderToClientCommand".equals(messageType)) {
           System.out.println("Received message: " + messageType);
+      } else if ("SendInvoiceToClientCommand".equals(messageType)) {
+          System.out.println("Received message: " + messageType);
+      } else if ("SendInvoiceReminderToClientCommand".equals(messageType)) {
+          System.out.println("Received message: " + messageType);
       } else if ("SendAssemblyInfoToClientCommand".equals(messageType)) {
           System.out.println("Received message: " + messageType);
 

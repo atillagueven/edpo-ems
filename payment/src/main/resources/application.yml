@@ -1,16 +1,15 @@
 server:
   port: 8089
-  servlet:
-    context-path: "/api"
 
 spring:
-  datasource.url: jdbc:h2:file:./camunda-h2-database
+  datasource.url: jdbc:h2:file:./camunda-h2-payment-database
   application.name: payment
   kafka:
     bootstrap-servers: "localhost:9092"
     consumer.auto-offset-reset: earliest
     consumer:
       group-id: "ems-payment"
+
 zeebe:
   client:
     broker.gateway-address: "localhost:26500"
