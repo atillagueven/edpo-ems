@@ -9,8 +9,6 @@ import org.springframework.kafka.config.TopicBuilder;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
-import java.nio.charset.StandardCharsets;
-
 /**
  * Helper to send messages, currently nailed to Kafka, but could also send via AMQP (e.g. RabbitMQ) or
  * any other transport easily
@@ -40,7 +38,7 @@ public class MessageSender {
             // ProducerRecord<String, String> record = new ProducerRecord<String, String>("ems-sales", jsonMessage);
             // record.headers().add("type", m.getType().getBytes());
 
-            byte[] messageBytes = jsonMessage.getBytes(StandardCharsets.UTF_8);
+            // byte[] messageBytes = jsonMessage.getBytes(StandardCharsets.UTF_8);
             ProducerRecord<String, String> record = new ProducerRecord<String, String>("ems-sales", jsonMessage);
             record.headers().add("type", m.getType().getBytes());
 
@@ -57,10 +55,10 @@ public class MessageSender {
             String jsonMessage = objectMapper.writeValueAsString(m);
 
             // wrap into a proper message for Kafka including a header
-//            ProducerRecord<String, String> record = new ProducerRecord<String, String>("ems-sales", jsonMessage);
+//            ProducerRecord<String, String> record = new ProducerRecord<String, String>("ems-notification", jsonMessage);
 //            record.headers().add("type", m.getType().getBytes());
 
-            byte[] messageBytes = jsonMessage.getBytes(StandardCharsets.UTF_8);
+            //byte[] messageBytes = jsonMessage.getBytes(StandardCharsets.UTF_8);
             ProducerRecord<String, String> record = new ProducerRecord<String, String>(topic, jsonMessage);
             record.headers().add("type", m.getType().getBytes());
 

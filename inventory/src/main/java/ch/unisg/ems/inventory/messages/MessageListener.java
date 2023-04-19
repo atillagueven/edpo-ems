@@ -3,6 +3,7 @@ package ch.unisg.ems.inventory.messages;
 import ch.unisg.ems.inventory.domain.AppointmentReply;
 import ch.unisg.ems.inventory.domain.Order;
 import ch.unisg.ems.inventory.flow.InventoryFlowContext;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.camunda.zeebe.client.ZeebeClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,6 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -72,22 +72,23 @@ public class MessageListener {
     public void orderReceived(String messagePayload) {
         System.out.println("New order received: " + messagePayload);
         try {
-//            Order order = new Order(messagePayload);
+            JsonNode message = objectMapper.readTree(messagePayload);
+            Order order = new Order(message.get("data").toString());
 
 
-//            String traceId = UUID.randomUUID().toString();
-//            InventoryFlowContext context = new InventoryFlowContext();
-//            context.setOfferId(order.getId());
-//            context.setTraceId(traceId);
-//            context.setOfferMessage("");
-//            context.setLoadProfile(order.getLoadProfile());
-//            context.setOfferAccepted(false);
+            String traceId = UUID.randomUUID().toString();
+            InventoryFlowContext context = new InventoryFlowContext();
+            context.setOfferId(order.getOfferId());
+            context.setTraceId(traceId);
+            context.setOfferMessage("");
+            context.setLoadProfile(order.getLoadProfile());
+            context.setOfferAccepted(false);
 
 
             zeebe.newCreateInstanceCommand() //
                     .bpmnProcessId("inventory-service") //
                     .latestVersion() //
-//                    .variables(context.asMap()) //
+                    .variables(context.asMap()) //
                     .send().join();
 
         } catch (Exception e) {

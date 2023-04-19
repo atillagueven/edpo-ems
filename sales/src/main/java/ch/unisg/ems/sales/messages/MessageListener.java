@@ -92,13 +92,14 @@ public class MessageListener {
         // Here you would maybe we should read something from the payload:
         System.out.println("Payment received: " + messagePayload);
 
+
         OfferReply offerReply = new OfferReply(messagePayload);
 
         HashMap<String, String> newVariables = new HashMap<>();
         newVariables.put("offerStatus",offerReply.getOfferAccepted() ? "accepted" : offerReply.getNewOfferRequested() ? "newOfferRequested" :"rejected");
 
         zeebe.newPublishMessageCommand() //
-                .messageName("ClientResponseReveivedEvent")
+                .messageName("ClientResponseReceivedEvent")
                 .correlationKey(offerReply.getOfferId())
                 .variables(newVariables)
                 .send().join();

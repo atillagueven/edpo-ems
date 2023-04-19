@@ -6,13 +6,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import java.io.IOException;
-import java.util.UUID;
 
 @Entity(name="OrderEntity")
 public class Order {
 
     @Id
-    protected String id;
+    protected String offerId;
 
     private String customerEmail;
     private String customerName;
@@ -24,19 +23,19 @@ public class Order {
     public Order(String json) throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         Order order = objectMapper.readValue(json, Order.class);
-        this.id = UUID.randomUUID().toString();
+        this.offerId = order.getOfferId();
         this.customerName = order.customerName;
         this.customerEmail = order.customerEmail;
         this.loadProfile = order.loadProfile;
     }
 
-    public String getId() {
-        return id;
+    public String getOfferId() {
+        return offerId;
     }
 
     @JsonProperty("orderId")
-    public void setId(String id) {
-        this.id = id;
+    public void setOfferId(String offerId) {
+        this.offerId = offerId;
     }
 
     public String getCustomerEmail() {
