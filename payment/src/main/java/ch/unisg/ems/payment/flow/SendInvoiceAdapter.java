@@ -37,14 +37,14 @@ public class SendInvoiceAdapter {
     @ZeebeWorker(type = "send-invoice")
     public void handle(JobClient client, ActivatedJob job) {
         OfferFlowContext context = OfferFlowContext.fromMap(job.getVariablesAsMap());
-//        Invoice invoice = invoiceRepository.findById(context.getInvoiceId()).get();
+        Invoice invoice = invoiceRepository.findById(context.getInvoiceId()).get();
 
         SendInvoiceToClientCommandPayload payload = new SendInvoiceToClientCommandPayload();
-        payload.setOfferId(context.getOfferId());
-        payload.setInvoiceId(context.getInvoiceId());
-        payload.setClientEmail(context.getClientEmail());
+        payload.setOfferId(invoice.getOfferId());
+        payload.setInvoiceId(invoice.getId());
+        payload.setClientEmail(invoice.getClientEmail());
         payload.setMessage("Pay invoice with given amount");
-        payload.setAmount(String.valueOf(context.getAmount()));
+        payload.setAmount(String.valueOf(invoice.getAmount()));
 
         System.out.println("Sending invoice to client: " + payload);
 
@@ -54,7 +54,7 @@ public class SendInvoiceAdapter {
         ), "ems-notification");
 
 
-        System.out.println("Invoice is sent for offer: " + context.getOfferId());
+        System.out.println("Invoice is sent for offer: " + invoice.getOfferId());
 
         client.newCompleteCommand(job.getKey())
                 .send()

@@ -23,16 +23,16 @@ public class ConfirmInvoiceAdapter {
     public void handle(JobClient client, ActivatedJob job) {
         // generate a UUID for this communication
         OfferFlowContext context = OfferFlowContext.fromMap(job.getVariablesAsMap());
-//        Invoice invoice = invoiceRepository.findById(context.getInvoiceId()).get();
+        Invoice invoice = invoiceRepository.findById(context.getInvoiceId()).get();
 
-//        invoice.setPaid(true);
+        invoice.setPaid(true);
 
-//        invoiceRepository.save(invoice);
+        invoiceRepository.save(invoice);
 
         HashMap<String, String> newVariables = new HashMap<>();
         newVariables.put("invoiceIsPaid", "true");
 
-        System.out.println("Invoice is confirmed as payed for offer: " + context.getOfferId());
+        System.out.println("Invoice is confirmed as payed for offer: " + invoice.getOfferId());
 
         client.newCompleteCommand(job.getKey())
                 .variables(newVariables)

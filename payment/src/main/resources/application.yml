@@ -9,6 +9,9 @@ spring:
     consumer.auto-offset-reset: earliest
     consumer:
       group-id: "ems-payment"
+  jpa:
+    hibernate:
+      ddl-auto: update
 
 zeebe:
   client:

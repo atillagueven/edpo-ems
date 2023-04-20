@@ -4,9 +4,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.IOException;
 import java.util.UUID;
-@Entity(name="InvoiceEntity")
+@Entity
 public class Invoice {
 
     @Id

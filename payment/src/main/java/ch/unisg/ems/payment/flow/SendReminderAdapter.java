@@ -27,12 +27,12 @@ public class SendReminderAdapter {
     public void handle(JobClient client, ActivatedJob job) {
 
         OfferFlowContext context = OfferFlowContext.fromMap(job.getVariablesAsMap());
-//        Invoice invoice = invoiceRepository.findById(context.getInvoiceId()).get();
+        Invoice invoice = invoiceRepository.findById(context.getInvoiceId()).get();
 
         SendReminderToClientCommandPayload payload = new SendReminderToClientCommandPayload();
-        payload.setOfferId(context.getOfferId());
-        payload.setInvoiceId(context.getInvoiceId());
-        payload.setClientEmail(context.getClientEmail());
+        payload.setOfferId(invoice.getOfferId());
+        payload.setInvoiceId(invoice.getId());
+        payload.setClientEmail(invoice.getClientEmail());
         payload.setMessage("Reminder to pay invoice");
 
         System.out.println("Sending reminder to client: " + payload);

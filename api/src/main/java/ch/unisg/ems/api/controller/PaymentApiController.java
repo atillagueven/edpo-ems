@@ -43,7 +43,7 @@ public class PaymentApiController {
 
         // wrap into a proper message for Kafka including a header
         ProducerRecord<String, String> record = new ProducerRecord<String, String>("ems-inventory", jsonMessage);
-        record.headers().add("type", "PaymentStartedEvent".getBytes());
+        record.headers().add("type", "InstallationCompleteEvent".getBytes());
 
         // and send it
         kafkaTemplate.send(record);

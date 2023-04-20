@@ -16,6 +16,7 @@ import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.UUID;
@@ -85,9 +86,13 @@ public class MessageListener {
         System.out.println("New payment requested: " + messagePayload);
         try {
             JsonNode message = objectMapper.readTree(messagePayload);
+
             Invoice invoice = new Invoice(message.get("data").get("offerId").toString().replace("\"", ""), false, message.get("data").get("clientEmail").toString().replace("\"", ""));
 
-//            invoiceRepository.save(invoice);
+//            Invoice invoice = new Invoice("offer 3", false, "fabio@geolditechnology.ch");
+
+            invoiceRepository.save(invoice);
+
 
             String traceId = UUID.randomUUID().toString();
             OfferFlowContext context = new OfferFlowContext();
