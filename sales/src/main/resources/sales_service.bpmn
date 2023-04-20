@@ -112,7 +112,7 @@
       <bpmn:incoming>Flow_09sc3xc</bpmn:incoming>
       <bpmn:outgoing>Flow_11ko0p2</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:sendTask id="Activity_1c5c2ez" name="Send Command: Send offer to client" implementation="##WebService">
+    <bpmn:sendTask id="Activity_1c5c2ez" name="Publish: Send offer to client Command" implementation="##WebService">
       <bpmn:extensionElements>
         <zeebe:taskDefinition type="send-offer-to-client" />
       </bpmn:extensionElements>
@@ -125,7 +125,7 @@
       <bpmn:outgoing>Flow_1w0k1px</bpmn:outgoing>
       <bpmn:outgoing>Flow_08nzmv1</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_1jicsfy" name="No" sourceRef="Gateway_048t3y6" targetRef="Activity_0o8rejj">
+    <bpmn:sequenceFlow id="Flow_1jicsfy" name="No" sourceRef="Gateway_048t3y6" targetRef="Event_0myvt14">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=offerStatus = "rejected"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_1w0k1px" name="Yes" sourceRef="Gateway_048t3y6" targetRef="Activity_0zxsic0">
@@ -139,7 +139,7 @@
     </bpmn:startEvent>
     <bpmn:sequenceFlow id="Flow_0tdm4qe" sourceRef="Event_0e7kwj8" targetRef="Activity_03un7ou" />
     <bpmn:sequenceFlow id="Flow_1ighzoc" sourceRef="Activity_0zxsic0" targetRef="Event_13m9ecg" />
-    <bpmn:sendTask id="Activity_0zxsic0" name="Send Event: Order placed">
+    <bpmn:sendTask id="Activity_0zxsic0" name="Publish: Order placed Event">
       <bpmn:extensionElements>
         <zeebe:taskDefinition type="order-placed" />
       </bpmn:extensionElements>
@@ -164,7 +164,7 @@
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="Flow_09sc3xc" sourceRef="Gateway_1h8e8lp" targetRef="Activity_1kfrs9m" />
     <bpmn:sequenceFlow id="Flow_11ko0p2" sourceRef="Activity_1kfrs9m" targetRef="Activity_1c5c2ez" />
-    <bpmn:sendTask id="Activity_0u8m6k1" name="Send Command: Send reminder to client" implementation="##WebService">
+    <bpmn:sendTask id="Activity_0u8m6k1" name="Publish: Send reminder to client Command" implementation="##WebService">
       <bpmn:extensionElements>
         <zeebe:taskDefinition type="send-reminder-to-client" />
       </bpmn:extensionElements>
@@ -206,7 +206,7 @@
       <bpmn:outgoing>Flow_1cf1l0a</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:sequenceFlow id="Flow_0fkmfng" sourceRef="Activity_0mxazri" targetRef="Activity_0aci612" />
-    <bpmn:sendTask id="Activity_0mxazri" name="Notify engineer">
+    <bpmn:sendTask id="Activity_0mxazri" name="Publish: Notify Engineer Command">
       <bpmn:extensionElements>
         <zeebe:taskDefinition type="send-notification-to-engineer" />
       </bpmn:extensionElements>
@@ -215,12 +215,12 @@
     </bpmn:sendTask>
     <bpmn:endEvent id="Event_0myvt14" name="Order Cancelled">
       <bpmn:incoming>Flow_1k4b3hz</bpmn:incoming>
-    </bpmn:endEvent>
-    <bpmn:serviceTask id="Activity_0o8rejj" name="Compensate Offer Creation">
-      <bpmn:extensionElements>
-        <zeebe:taskDefinition type="compensate-offer-creation" />
-      </bpmn:extensionElements>
       <bpmn:incoming>Flow_1jicsfy</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:serviceTask id="Activity_0o8rejj" name="Clean up offer and mark as canceled">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="clean-up-offer" />
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_0679nkx</bpmn:incoming>
       <bpmn:outgoing>Flow_1k4b3hz</bpmn:outgoing>
     </bpmn:serviceTask>
@@ -271,6 +271,7 @@
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0b4d8rz_di" bpmnElement="Activity_0zxsic0">
         <dc:Bounds x="1310" y="147" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_07gx3tt_di" bpmnElement="Activity_1gr32fj">
         <dc:Bounds x="980" y="147" width="100" height="80" />
@@ -292,22 +293,23 @@
           <dc:Bounds x="1046" y="266" width="68" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1kyt0qm_di" bpmnElement="Activity_0aci612">
-        <dc:Bounds x="440" y="310" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_12pi2te_di" bpmnElement="Activity_0mxazri">
-        <dc:Bounds x="300" y="310" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1cdk2ev_di" bpmnElement="Event_0myvt14" bioc:stroke="#831311" bioc:fill="#ffcdd2" color:background-color="#ffcdd2" color:border-color="#831311">
-        <dc:Bounds x="1192" y="402" width="36" height="36" />
+        <dc:Bounds x="1472" y="292" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1170" y="445" width="81" height="14" />
+          <dc:Bounds x="1449" y="268" width="81" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_04jcmo0_di" bpmnElement="Activity_0o8rejj">
-        <dc:Bounds x="1160" y="270" width="100" height="80" />
+        <dc:Bounds x="1110" y="360" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_12pi2te_di" bpmnElement="Activity_0mxazri">
+        <dc:Bounds x="290" y="310" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1kyt0qm_di" bpmnElement="Activity_0aci612">
+        <dc:Bounds x="420" y="310" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1f1nhfe_di" bpmnElement="Event_1ye6nct">
         <dc:Bounds x="252" y="209" width="36" height="36" />
@@ -324,16 +326,17 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1jicsfy_di" bpmnElement="Flow_1jicsfy">
         <di:waypoint x="1210" y="212" />
-        <di:waypoint x="1210" y="270" />
+        <di:waypoint x="1210" y="310" />
+        <di:waypoint x="1472" y="310" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1240" y="398" width="15" height="14" />
+          <dc:Bounds x="1257" y="293" width="15" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1w0k1px_di" bpmnElement="Flow_1w0k1px">
         <di:waypoint x="1235" y="187" />
         <di:waypoint x="1310" y="187" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1264" y="169" width="18" height="14" />
+          <dc:Bounds x="1254" y="169" width="18" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_08nzmv1_di" bpmnElement="Flow_08nzmv1">
@@ -393,28 +396,29 @@
       <bpmndi:BPMNEdge id="Flow_0679nkx_di" bpmnElement="Flow_0679nkx">
         <di:waypoint x="1055" y="310" />
         <di:waypoint x="1160" y="310" />
+        <di:waypoint x="1160" y="360" />
         <bpmndi:BPMNLabel>
-          <dc:Bounds x="1140" y="312" width="18" height="14" />
+          <dc:Bounds x="1104" y="313" width="18" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1e3jjx4_di" bpmnElement="Flow_1e3jjx4">
         <di:waypoint x="270" y="245" />
         <di:waypoint x="270" y="350" />
-        <di:waypoint x="300" y="350" />
+        <di:waypoint x="290" y="350" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1cf1l0a_di" bpmnElement="Flow_1cf1l0a">
-        <di:waypoint x="490" y="310" />
-        <di:waypoint x="490" y="261" />
-        <di:waypoint x="540" y="261" />
+        <di:waypoint x="520" y="350" />
+        <di:waypoint x="540" y="350" />
         <di:waypoint x="540" y="212" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0fkmfng_di" bpmnElement="Flow_0fkmfng">
-        <di:waypoint x="400" y="350" />
-        <di:waypoint x="440" y="350" />
+        <di:waypoint x="390" y="350" />
+        <di:waypoint x="420" y="350" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1k4b3hz_di" bpmnElement="Flow_1k4b3hz">
-        <di:waypoint x="1210" y="350" />
-        <di:waypoint x="1210" y="402" />
+        <di:waypoint x="1210" y="400" />
+        <di:waypoint x="1490" y="400" />
+        <di:waypoint x="1490" y="328" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

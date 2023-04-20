@@ -90,8 +90,14 @@ public class MessageListener {
 
         OfferReply offerReply = new OfferReply(messagePayload);
 
+        String clientReply = offerReply.getOfferAccepted() ? "accepted" : offerReply.getNewOfferRequested() ? "newOfferRequested" :"rejected";
+
+        Offer offer = offerRepository.findById(offerReply.getOfferId()).get();
+        offer.setOfferStatus(clientReply);
+        offerRepository.save(offer);
+
         HashMap<String, String> newVariables = new HashMap<>();
-        newVariables.put("offerStatus",offerReply.getOfferAccepted() ? "accepted" : offerReply.getNewOfferRequested() ? "newOfferRequested" :"rejected");
+        newVariables.put("offerStatus",clientReply);
 
         zeebe.newPublishMessageCommand() //
                 .messageName("ClientResponseReceivedEvent")

@@ -33,21 +33,20 @@ public class CreateOfferAdapter {
         int consumption = context.getLoadProfileConsumption();
         int production = context.getLoadProfileProduction();
 
+        // Added error for demo purposes, in a real application this would be handled differently
         if(consumption < 0) {
             System.out.println("Battery size could not be calculated");
             throw new ZeebeBpmnError("Error_BatteryCalculationError", "Battery size could not be calculated");
         }
 
-        int energySurplus = consumption - production;
+        int energySurplus = production - consumption;
 
         if (energySurplus > 500) {
             recommendedBatterySize = "large";
         } else if (energySurplus > 200) {
             recommendedBatterySize = "medium";
-        } else if (energySurplus >= 0) {
-            recommendedBatterySize = "small";
         } else {
-            recommendedBatterySize = "none";
+            recommendedBatterySize = "small";
         }
 
         offer.setBatterySize(recommendedBatterySize);

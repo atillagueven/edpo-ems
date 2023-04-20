@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 
 @Component
-public class CompensateOfferCreation {
+public class CleanUpOfferAdapter {
 
     @Qualifier("zeebeClientLifecycle")
     @Autowired
@@ -21,13 +21,14 @@ public class CompensateOfferCreation {
     @Autowired
     private OfferRepository offerRepository;
 
-    @ZeebeWorker(type = "compensate-offer-creation")
+    @ZeebeWorker(type = "clean-up-offer")
     public void handle(JobClient client, ActivatedJob job) {
-        System.out.println("Access CompensateOfferCreation");
+        System.out.println("Access CleanUpOfferAdapter");
         OfferFlowContext context = OfferFlowContext.fromMap(job.getVariablesAsMap());
-        Offer offer = offerRepository.findById(context.getOfferId()).get();
 
-        offerRepository.delete(offer);
+        Offer offer = offerRepository.findById(context.getOfferId()).get();
+        offer.setOfferStatus("rejected");
+        offerRepository.save(offer);
 
         client.newCompleteCommand(job.getKey())
                 .send()

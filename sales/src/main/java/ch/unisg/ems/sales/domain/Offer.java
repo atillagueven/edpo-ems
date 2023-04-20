@@ -14,13 +14,12 @@ public class Offer {
 
     @Id
     protected String id;
-
     private String customerEmail;
     private String customerName;
     private Integer loadProfileConsumption;
     private Integer loadProfileProduction;
-
     private String batterySize;
+    private String offerStatus;
 
     public Offer() {}
 
@@ -34,6 +33,7 @@ public class Offer {
         this.loadProfileConsumption = offer.loadProfileConsumption;
         this.loadProfileProduction = offer.loadProfileProduction;
         this.batterySize = offer.batterySize;
+        this.offerStatus = "PENDING";
     }
 
     public String getId() {
@@ -84,4 +84,8 @@ public class Offer {
     public void setBatterySize(String batterySize) {
         this.batterySize = batterySize;
     }
+
+    public String getOfferStatus() {return offerStatus;}
+
+    public void setOfferStatus(String offerStatus) {this.offerStatus = offerStatus;}
 }
