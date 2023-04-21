@@ -1,7 +1,5 @@
 package ch.unisg.ems.sales.flow;
 
-import ch.unisg.ems.sales.domain.Offer;
-import ch.unisg.ems.sales.flow.payload.SendOfferToClientCommandPayload;
 import ch.unisg.ems.sales.messages.Message;
 import ch.unisg.ems.sales.messages.MessageSender;
 import ch.unisg.ems.sales.persistence.OfferRepository;
