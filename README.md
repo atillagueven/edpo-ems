@@ -13,14 +13,11 @@ run `docker-compose -f docker-compose.yml up` (Camunda Platform) or `docker-comp
 Then start your services individually.
 To ensure correct behavior, make sure all the containers are running before starting the services.
 
-## Documentation
-
-The documentation can be found in the [docs](docs/) folder.
 
 ## Architecture
 
 ### Architectural Decisions
-ADR's can be found in the [docs/adr](docs/adr/) folder.
+ADR's can be found in the [doc/adr](doc/adr/) folder.
 
 ### Overview
 ![main-flow.png](doc%2Fimages%2Fmain-flow.png)
