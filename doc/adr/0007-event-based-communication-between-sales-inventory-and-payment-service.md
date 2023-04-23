@@ -1,4 +1,4 @@
-# 02 Event-Based Communication Between Sales, Inventory, and Payment Services
+# 07 Event-Based Communication Between Sales, Inventory, and Payment Services
 
 Date: 2020-04-12
 
