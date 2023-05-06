@@ -2,12 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/api/api.iml" filepath="$PROJECT_DIR$/api/api.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/edpo-ems.iml" filepath="$PROJECT_DIR$/.idea/edpo-ems.iml" />
-      <module fileurl="file://$PROJECT_DIR$/inventory/ems-inventory.iml" filepath="$PROJECT_DIR$/inventory/ems-inventory.iml" />
-      <module fileurl="file://$PROJECT_DIR$/notification/ems-notification.iml" filepath="$PROJECT_DIR$/notification/ems-notification.iml" />
       <module fileurl="file://$PROJECT_DIR$/payment/ems-payment.iml" filepath="$PROJECT_DIR$/payment/ems-payment.iml" />
-      <module fileurl="file://$PROJECT_DIR$/sales/ems-sales.iml" filepath="$PROJECT_DIR$/sales/ems-sales.iml" />
     </modules>
   </component>
 </project>
