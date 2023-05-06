@@ -1,4 +1,4 @@
-# 03 Command-Based Communication with Notification Service
+# 08 Command-Based Communication with Notification Service
 
 Date: 2020-04-12
 

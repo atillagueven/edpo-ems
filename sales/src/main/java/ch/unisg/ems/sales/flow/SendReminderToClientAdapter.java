@@ -1,7 +1,7 @@
 package ch.unisg.ems.sales.flow;
 
 import ch.unisg.ems.sales.domain.Offer;
-import ch.unisg.ems.sales.flow.payload.SendOfferToClientCommandPayload;
+import ch.unisg.ems.sales.flow.payload.SendEmailCommandPayload;
 import ch.unisg.ems.sales.messages.Message;
 import ch.unisg.ems.sales.messages.MessageSender;
 import ch.unisg.ems.sales.persistence.OfferRepository;
@@ -30,16 +30,20 @@ public class SendReminderToClientAdapter {
         OfferFlowContext context = OfferFlowContext.fromMap(job.getVariablesAsMap());
         Offer offer = offerRepository.findById(context.getOfferId()).get();
 
-        SendOfferToClientCommandPayload payload = new SendOfferToClientCommandPayload();
-        payload.setOfferId(context.getOfferId());
-        payload.setClientName(offer.getCustomerName());
+        String emailContent = "Dear " + offer.getCustomerName() + ",\n\n"
+                + context.getOfferMessage() + "\n\n"
+                + "Please click on the following link to accept the offer:\n"
+                + "http://localhost:3000/sales/offer-reply?id=" + context.getOfferId() + "\n\n"
+                + "Best regards,\n" + "EMS Team";
+
+        SendEmailCommandPayload payload = new SendEmailCommandPayload();
         payload.setClientEmail(offer.getCustomerEmail());
-        payload.setOfferMessage(context.getOfferMessage());
+        payload.setEmailContent(emailContent);
 
         System.out.println("Sending offer to client: " + payload);
 
-        messageSender.send(new Message<SendOfferToClientCommandPayload>(
-                "SendReminderToClientCommand",
+        messageSender.send(new Message<SendEmailCommandPayload>(
+                "SendEmailCommand",
                 payload
         ), "ems-notification");
 

@@ -1,6 +1,7 @@
 package ch.unisg.ems.notification.messages;
 
 import ch.unisg.ems.notification.application.NotificationService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
@@ -25,41 +26,13 @@ public class MessageListener {
   public void orderUpdated(String messageJson, @Header("type") String messageType) throws Exception {
       System.out.println("Received message: " + messageType);
 
-      if ("SendOfferToClientCommand".equals(messageType)) {
-          System.out.println("Received message: " + messageType);
-          JsonNode message = objectMapper.readTree(messageJson);
-          String offerId = message.get("data").get("offerId").asText();
-          String clientEmail = message.get("data").get("clientEmail").asText();
-          String clientName = message.get("data").get("clientName").asText();
-          String offerMessage = message.get("data").get("offerMessage").asText();
-
-          String emailContent = "Dear " + clientName + ",\n\n"
-                  + offerMessage + "\n\n"
-                  + "Please click on the following link to accept the offer:\n"
-                  + "http://localhost:3000/sales/offer-reply?id=" + offerId + "\n\n"
-                  + "Best regards,\n" + "EMS Team";
-
-          notificationService.sendEmail(clientEmail, emailContent);
+      if ("SendEmailCommand".equals(messageType)) {
+          processPayloadAndSendEmail(messageJson);
+      } else if ("SendOfferToClientCommand".equals(messageType)) {
+          processPayloadAndSendEmail(messageJson);
       } else if ("SendReminderToClientCommand".equals(messageType)) {
-          System.out.println("Received message: " + messageType);
-          System.out.println("Received message: " + messageType);
-          JsonNode message = objectMapper.readTree(messageJson);
-          String offerId = message.get("data").get("offerId").asText();
-          String clientEmail = message.get("data").get("clientEmail").asText();
-          String clientName = message.get("data").get("clientName").asText();
-          String offerMessage = message.get("data").get("offerMessage").asText();
-
-          String emailContent = "Dear " + clientName + ",\n\n"
-                  + offerMessage + "\n\n"
-                  + "REMINDER \n"
-                  + "Please click on the following link to accept the offer:\n"
-                  + "http://localhost:3000/sales/offer-reply?id=" + offerId + "\n\n"
-                  + "Best regards,\n" + "EMS Team";
-
-          notificationService.sendEmail(clientEmail, emailContent);
+          processPayloadAndSendEmail(messageJson);
       } else if ("SendInvoiceToClientCommand".equals(messageType)) {
-          System.out.println("Received message: " + messageType);
-          System.out.println("Received message: " + messageType);
           JsonNode message = objectMapper.readTree(messageJson);
           String offerId = message.get("data").get("offerId").asText();
           String clientEmail = message.get("data").get("clientEmail").asText();
@@ -69,9 +42,7 @@ public class MessageListener {
                   + "Best regards,\n" + "EMS Team";
 
           notificationService.sendEmail(clientEmail, emailContent);
-
       } else if ("SendInvoiceReminderToClientCommand".equals(messageType)) {
-          System.out.println("Received message: " + messageType);
           JsonNode message = objectMapper.readTree(messageJson);
           String offerId = message.get("data").get("offerId").asText();
           String clientEmail = message.get("data").get("clientEmail").asText();
@@ -81,16 +52,12 @@ public class MessageListener {
                   + "Best regards,\n" + "EMS Team";
 
           notificationService.sendEmail(clientEmail, emailContent);
-
       } else if ("SendAssemblyInfoToClientCommand".equals(messageType)) {
-          System.out.println("Received message: " + messageType);
-
           JsonNode message = objectMapper.readTree(messageJson);
           String offerId = message.get("data").get("offerId").asText();
           String clientEmail = message.get("data").get("clientEmail").asText();
           String clientName = message.get("data").get("clientName").asText();
           String offerMessage = message.get("data").get("offerMessage").asText();
-          String emsSystemRecommendation = message.get("data").get("emsSystemRecommendation").asText();
 
           String emailContent = "Dear " + clientName + ",\n\n"
                   + offerMessage + "\n\n"
@@ -99,18 +66,27 @@ public class MessageListener {
                   + "Best regards,\n" + "EMS Team";
 
           notificationService.sendEmail(clientEmail, emailContent);
-
       } else if ("SendNotificationToEngineerCommand".equals(messageType)) {
-          System.out.println("Received message: " + messageType);
           String emailContent = "Dear Engineer\n\n"
                   + "There is a new task for you.\n"
                   + "Best regards,\n" + "EMS Team";
           notificationService.sendEmail("engineer@ems.ch", emailContent);
-
       }
       else {
             System.out.println("Received unknown message: " + messageType);
       }
   }
-    
+
+  private void processPayloadAndSendEmail(String payload) {
+      try {
+          JsonNode message = objectMapper.readTree(payload);
+          String emailContent = message.get("data").get("emailContent").asText();
+          String clientEmail = message.get("data").get("clientEmail").asText();
+
+          notificationService.sendEmail(clientEmail, emailContent);
+      } catch (JsonProcessingException e) {
+          System.out.println("Error while processing payload: " + e.getMessage());
+      }
+  }
+
 }
