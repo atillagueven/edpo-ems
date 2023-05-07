@@ -1,0 +1,31 @@
+{
+  "components": [
+    {
+      "text": "# An order is ready for installation",
+      "type": "text",
+      "id": "Field_00r103c"
+    },
+    {
+      "label": "Appointment date",
+      "type": "textfield",
+      "id": "Field_00mpz43",
+      "key": "appointmentDate",
+      "disabled": true
+    },
+    {
+      "label": "Installation complete",
+      "type": "checkbox",
+      "id": "Field_07he633",
+      "key": "field_1r3m3ta"
+    }
+  ],
+  "type": "default",
+  "id": "Form_0q8suih",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.1.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.8.0"
+  },
+  "schemaVersion": 7
+}
