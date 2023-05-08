@@ -144,11 +144,11 @@
       <bpmn:outgoing>Flow_1b8v3zg</bpmn:outgoing>
       <bpmn:outgoing>Flow_1k8c89e</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_1b8v3zg" sourceRef="Gateway_0zarx8i" targetRef="Gateway_127inj3">
+    <bpmn:sequenceFlow id="Flow_1b8v3zg" name="materials not in stock" sourceRef="Gateway_0zarx8i" targetRef="Gateway_127inj3">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=partsAvailable = "false"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="Flow_0mjazu1" sourceRef="Activity_1i193kl" targetRef="Event_0ayciv4" />
-    <bpmn:sequenceFlow id="Flow_1k8c89e" sourceRef="Gateway_0zarx8i" targetRef="Gateway_0t1tu36">
+    <bpmn:sequenceFlow id="Flow_1k8c89e" name="materials in stock" sourceRef="Gateway_0zarx8i" targetRef="Gateway_0t1tu36">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=partsAvailable = "true"</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:parallelGateway id="Gateway_157ngvo">
@@ -223,6 +223,20 @@
         <dc:Bounds x="1180" y="240" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_05blutf_di" bpmnElement="Activity_05blutf">
+        <dc:Bounds x="1400" y="240" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0gfnjn1_di" bpmnElement="inventory_process_finished" bioc:stroke="#5b176d" bioc:fill="#e1bee7" color:background-color="#e1bee7" color:border-color="#5b176d">
+        <dc:Bounds x="1682" y="262" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="1659" y="305" width="89" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1gm34cv_di" bpmnElement="Activity_1hgjsf7">
+        <dc:Bounds x="1540" y="240" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_1pltm0j_di" bpmnElement="Gateway_127inj3">
         <dc:Bounds x="465" y="165" width="50" height="50" />
       </bpmndi:BPMNShape>
@@ -258,20 +272,6 @@
         <bpmndi:BPMNLabel>
           <dc:Bounds x="1301" y="305" width="78" height="27" />
         </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_05blutf_di" bpmnElement="Activity_05blutf">
-        <dc:Bounds x="1400" y="240" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0gfnjn1_di" bpmnElement="inventory_process_finished" bioc:stroke="#5b176d" bioc:fill="#e1bee7" color:background-color="#e1bee7" color:border-color="#5b176d">
-        <dc:Bounds x="1682" y="262" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <dc:Bounds x="1659" y="305" width="89" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1gm34cv_di" bpmnElement="Activity_1hgjsf7">
-        <dc:Bounds x="1540" y="240" width="100" height="80" />
-        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_1mq4qhr_di" bpmnElement="Flow_1mq4qhr">
         <di:waypoint x="650" y="120" />
@@ -320,6 +320,9 @@
         <di:waypoint x="400" y="255" />
         <di:waypoint x="400" y="190" />
         <di:waypoint x="465" y="190" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="322" y="196" width="75" height="27" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0mjazu1_di" bpmnElement="Flow_0mjazu1">
         <di:waypoint x="650" y="270" />
@@ -330,6 +333,9 @@
         <di:waypoint x="400" y="370" />
         <di:waypoint x="990" y="370" />
         <di:waypoint x="990" y="305" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="653" y="352" width="85" height="14" />
+        </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0dszfvj_di" bpmnElement="Flow_0dszfvj">
         <di:waypoint x="1015" y="280" />
