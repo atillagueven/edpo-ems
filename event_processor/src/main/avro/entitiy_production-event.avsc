@@ -1,0 +1,31 @@
+{
+    "namespace": "ch.unisg.ems.eventprocessor.model",
+    "name": "EntityProductionEvent",
+    "type": "record",
+    "fields": [
+      {
+        "name": "id",
+        "type": "string"
+      },
+      {
+        "name": ""reactive",
+        "type": "boolean"
+      },
+      {
+        "name": "load",
+        "type": "integer"
+      },
+      {
+        "name": "unit_load",
+        "type": "string"
+      },
+      {
+        "name": "timestamp",
+        "type": "string"
+      },
+      {
+        "name": "unit_reactive",
+        "type": "string"
+      }
+    ]
+  }
