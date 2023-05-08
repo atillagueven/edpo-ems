@@ -1,3 +1,5 @@
+package ch.unisg.ems.producerconsumation;
+
 import com.google.common.io.Resources;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -7,21 +9,38 @@ import java.io.*;
 import java.util.*;
 
 
-public class ProducerProduction {
+public class ProducerConsumation {
 
-    private final static String TOPIC_NAME = "pv_production";
+    private final static String TOPIC_NAME = "energy_consumation";
     private final static String BOOTSTRAP_SERVERS = "localhost:9092";
 
     // dataset path, csv file has to be in resources directory
-    private final static String CSV_DATASET = "loadprofiles/2022_Production.csv";
+    private final static String LOAD_PROFILE_DIRECTORY = "loadprofiles";
+    // dataset path, csv file has to be in resources directory
+    private final static String DEFAULT_CSV_DATASET = "2022_Production.csv";
 
     private final static String delimiter = ";";
 
     public static void main(String[] args) throws Exception {
+        String dataset = "";
+        // if dataset is provided as run argument use this dataset, otherwise use default
+        if (args.length > 0) {
+            dataset = args[0];
+        } else {
+            dataset = DEFAULT_CSV_DATASET;
+        }
 
+        System.out.println("using dataset at path: " + LOAD_PROFILE_DIRECTORY + "/" + dataset);
         // read csv dataset to arraylist
         List<List<String>> records = new ArrayList<List<String>>();
-        try (CSVReader csvReader = new CSVReader(new FileReader(Resources.getResource(CSV_DATASET).getPath()))) {
+        String filePath = Resources.getResource(LOAD_PROFILE_DIRECTORY + "/" + dataset).getFile();
+
+        // replace file path to work with docker container
+        filePath = filePath.replace("file:/app.jar!/", "/app/");
+
+        // read csv dataset to arraylist
+        System.out.println("resources path: " + filePath);
+        try (CSVReader csvReader = new CSVReader(new FileReader(filePath))) {
             String[] values = null;
             while ((values = csvReader.readNext()) != null) {
                 records.add(Arrays.asList(values));
@@ -30,7 +49,7 @@ public class ProducerProduction {
 
         // Read Kafka properties file and create Kafka producer with the given properties
         KafkaProducer<byte[], String> producer;
-        try (InputStream props = Resources.getResource("producer.properties").openStream()) {
+        try (InputStream props = Resources.getResource("application.properties").openStream()) {
             Properties properties = new Properties();
             properties.load(props);
             // Create Kafka producer

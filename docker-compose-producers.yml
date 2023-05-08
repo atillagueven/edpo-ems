@@ -1,0 +1,29 @@
+
+services:
+  producerA:
+    build:
+      context: ./producer_production
+    image: edpo-ems-producer-production
+    environment:
+      JAVA_OPTS: "2022_Production_alt.csv"
+
+  producerB:
+    image: edpo-ems-producer-production
+    environment:
+      JAVA_OPTS: "2022_Production.csv"
+
+  consumerA:
+    build:
+      context: ./producer_consumation
+    image: edpo-ems-producer-consumation
+    environment:
+      JAVA_OPTS: "2022_Consumation.csv"
+
+  consumerB:
+    image: edpo-ems-producer-consumation
+    environment:
+      JAVA_OPTS: "2022_Consumation.csv"
+
+networks:
+  ems:
+    driver: bridge
