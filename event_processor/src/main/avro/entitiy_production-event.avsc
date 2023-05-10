@@ -3,29 +3,13 @@
     "name": "EntityProductionEvent",
     "type": "record",
     "fields": [
-      {
-        "name": "id",
-        "type": "string"
-      },
-      {
-        "name": "reactive",
-        "type": "boolean"
-      },
-      {
-        "name": "load",
-        "type": "int"
-      },
-      {
-        "name": "unit_load",
-        "type": "string"
-      },
-      {
+        {
         "name": "timestamp",
         "type": "string"
       },
       {
-        "name": "unit_reactive",
-        "type": "string"
+        "name": "load",
+        "type": "int"
       }
     ]
   }

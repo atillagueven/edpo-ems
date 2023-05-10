@@ -32,14 +32,14 @@ class EmsTopology {
                     (event) -> {
                       EntityProductionEvent contentFilteredProductionEvent = new EntityProductionEvent();
                       contentFilteredProductionEvent.setTimestamp(event.getTimestamp());
-                      contentFilteredProductionEvent.setId(event.getId());
+                      // contentFilteredProductionEvent.setId(event.getId());
                       contentFilteredProductionEvent.setLoad(event.getLoad());
                       return contentFilteredProductionEvent;
                     });
 
 
         contentFilteredProductionEvents.to(
-                "pv_production_cleaned",
+                "pv_production_clean",
                 Produced.with(
                         Serdes.ByteArray(),
                         // registryless Avro Serde
