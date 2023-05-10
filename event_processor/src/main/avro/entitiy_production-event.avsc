@@ -8,12 +8,12 @@
         "type": "string"
       },
       {
-        "name": ""reactive",
+        "name": "reactive",
         "type": "boolean"
       },
       {
         "name": "load",
-        "type": "integer"
+        "type": "int"
       },
       {
         "name": "unit_load",

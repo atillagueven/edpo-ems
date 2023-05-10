@@ -1,5 +1,6 @@
 package ch.unisg.ems.eventprocessor;
 
+import ch.unisg.ems.eventprocessor.model.EntityProductionEvent;
 import ch.unisg.ems.eventprocessor.serialization.ProductionEvent;
 import ch.unisg.ems.eventprocessor.serialization.json.ProductionEventSerdes;
 import org.apache.kafka.common.serialization.Serdes;
@@ -26,24 +27,25 @@ class EmsTopology {
     stream.print(Printed.<byte[], ProductionEvent>toSysOut().withLabel("pv_production-event-stream"));
 
     // Apply content filter to production events // Keep only relevant attributes
-    KStream<byte[], ProductionEvent> contentFilteredProductionEvents =
+    KStream<byte[], EntityProductionEvent> contentFilteredProductionEvents =
             stream.mapValues(
                     (event) -> {
-                      ProductionEvent contentFilteredProductionEvent = new ProductionEvent();
+                      EntityProductionEvent contentFilteredProductionEvent = new EntityProductionEvent();
                       contentFilteredProductionEvent.setTimestamp(event.getTimestamp());
                       contentFilteredProductionEvent.setId(event.getId());
                       contentFilteredProductionEvent.setLoad(event.getLoad());
                       return contentFilteredProductionEvent;
                     });
 
-    // TODO fix error with AvroSerdes
- /*   contentFilteredProductionEvents.to(
-            "pv_production_cleaned",
-            Produced.with(
-                    Serdes.ByteArray(),
-                    // registryless Avro Serde
-                    com.mitchseymour.kafka.serialization.avro.AvroSerdes.get(ProductionEvent.class)));
-*/
+
+        contentFilteredProductionEvents.to(
+                "pv_production_cleaned",
+                Produced.with(
+                        Serdes.ByteArray(),
+                        // registryless Avro Serde
+                        com.mitchseymour.kafka.serialization.avro.AvroSerdes.get(EntityProductionEvent.class)));
+
+
     return builder.build();
   }
 }
