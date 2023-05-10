@@ -1,4 +1,4 @@
-package ch.unisg.ems.producerconsumation;
+package ch.unisg.ems.producerconsumption;
 
 import com.google.common.io.Resources;
 import org.apache.kafka.clients.producer.KafkaProducer;
@@ -9,7 +9,7 @@ import java.io.*;
 import java.util.*;
 
 
-public class ProducerConsumation {
+public class ProducerConsumption {
 
     private final static String TOPIC_NAME = "energy_consumation";
     private final static String BOOTSTRAP_SERVERS = "localhost:9092";

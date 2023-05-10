@@ -11,6 +11,8 @@
         <option value="$PROJECT_DIR$/notification/pom.xml" />
         <option value="$PROJECT_DIR$/producer_production/pom.xml" />
         <option value="$PROJECT_DIR$/producer_consumation/pom.xml" />
+        <option value="$PROJECT_DIR$/event_processor/pom.xml" />
+        <option value="$PROJECT_DIR$/actuator/pom.xml" />
       </list>
     </option>
   </component>

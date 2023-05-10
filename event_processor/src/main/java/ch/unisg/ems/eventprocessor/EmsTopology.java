@@ -10,6 +10,7 @@ import org.apache.kafka.streams.kstream.Consumed;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.Printed;
 import org.apache.kafka.streams.kstream.Produced;
+import com.mitchseymour.kafka.serialization.avro.AvroSerdes;
 
 import java.util.Arrays;
 import java.util.List;
@@ -43,7 +44,16 @@ class EmsTopology {
                 Produced.with(
                         Serdes.ByteArray(),
                         // registryless Avro Serde
-                        com.mitchseymour.kafka.serialization.avro.AvroSerdes.get(EntityProductionEvent.class)));
+                        AvroSerdes.get(EntityProductionEvent.class)));
+
+      // Perform a join on id and customer id
+      /*KTable<String, FixationClick> fixationAndClickCountsByAOI = fixationStatsByAOI.join(
+              clickCountByAOI,
+              (fixationStats, clickCount) -> new FixationClick(fixationStats, clickCount),
+              Materialized.<String, FixationClick, KeyValueStore<Bytes, byte[]>>as("FixationClickStats")
+                      .withKeySerde(Serdes.String())
+                      .withValueSerde(new FixationClickSerdes())
+      );*/
 
 
     return builder.build();
