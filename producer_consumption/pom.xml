@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>ch.unisg.ems</groupId>
-    <artifactId>producer-consumation</artifactId>
+    <artifactId>producer-consumption</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <dependencies>
         <dependency>
@@ -55,7 +55,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>ch.unisg.ems.producerconsumation.ProducerConsumation</mainClass>
+                            <mainClass>ch.unisg.ems.producerconsumption.ProducerConsumption</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

@@ -61,6 +61,7 @@ public class ProducerProduction {
         records.remove(0);
 
         byte[] key = null;
+
         // generate production data, based on csv dataset
         records.forEach((r) -> {
             String[] values = r.get(0).split(delimiter);
@@ -74,7 +75,7 @@ public class ProducerProduction {
             ProducerRecord<byte[], String> record = new ProducerRecord<>(TOPIC_NAME, key, message);
             producer.send(record);
             try {
-                Thread.sleep(1000);
+                Thread.sleep(500);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }

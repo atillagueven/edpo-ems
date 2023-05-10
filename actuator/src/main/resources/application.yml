@@ -1,0 +1,13 @@
+server.port: 8069
+
+spring:
+  application.name: ems-actuator
+  kafka:
+    bootstrap-servers: "localhost:9092"
+    consumer.auto-offset-reset: earliest
+    group-id: "ems-actuator"
+
+kafka:
+  bootstrap-address: localhost:9092
+  ems-payment.topic-name: ems-actuator
+  group-id: ems-actuator
