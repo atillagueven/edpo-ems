@@ -1,5 +1,6 @@
 package ch.unisg.ems.eventprocessor;
 
+import ch.unisg.ems.eventprocessor.loadprofile.UnitConverter;
 import ch.unisg.ems.eventprocessor.model.EntityProductionEvent;
 import ch.unisg.ems.eventprocessor.serialization.ProductionEvent;
 import ch.unisg.ems.eventprocessor.serialization.json.ProductionEventSerdes;
@@ -15,11 +16,13 @@ import java.util.List;
 class EmsTopology {
   private static final List<String> currencies = Arrays.asList("bitcoin", "ethereum");
 
+  private static UnitConverter unitConverter = new UnitConverter();
+
   public static Topology build() {
     // the builder is used to construct the topology
     StreamsBuilder builder = new StreamsBuilder();
 
-    // start streaming gazes using our custom value serdes.
+    // start streaming production events using our custom value serdes.
     KStream<byte[], ProductionEvent> stream =
             builder.stream("pv_production", Consumed.with(Serdes.ByteArray(), new ProductionEventSerdes()));
     stream.print(Printed.<byte[], ProductionEvent>toSysOut().withLabel("pv_production-event-stream"));
@@ -29,46 +32,45 @@ class EmsTopology {
             stream.mapValues(
                     (event) -> {
                       EntityProductionEvent contentFilteredProductionEvent = new EntityProductionEvent();
+                      contentFilteredProductionEvent.setPvId(event.getPvId());
+                      contentFilteredProductionEvent.setLoad(event.getLoad());
                       contentFilteredProductionEvent.setTimestamp(event.getTimestamp());
-                      // contentFilteredProductionEvent.setId(event.getId());
                       contentFilteredProductionEvent.setUnitLoad(event.getUnitLoad());
                       return contentFilteredProductionEvent;
                     });
 
-    KStream<byte[], EntityProductionEvent> filtered =
-          contentFilteredProductionEvents.filterNot(
-                  (key, event) -> event.getLoad() > 1000);
+      // match all events that have kW as unit
+      Predicate<byte[], EntityProductionEvent> unitKW = (key, event) -> event.getUnitLoad().equals("kW");
 
-      // match all tweets that specify English as the source language
-      Predicate<byte[], EntityProductionEvent> eventsWithUnitKWH = (key, event) -> event.getUnitLoad().equals("kW");
+      // match all other events
+      Predicate<byte[], EntityProductionEvent> unitNotKW = (key, event) -> !event.getUnitLoad().equals("kW");
 
-      // match all other tweets
-      Predicate<byte[], EntityProductionEvent> eventsWithOtherUnit = (key, event) -> !event.getUnitLoad().equals("kW");
+      // branch based on load unit
+      KStream<byte[], EntityProductionEvent>[] branches = contentFilteredProductionEvents.branch(unitKW, unitNotKW);
 
-      // branch based on tweet language
-      KStream<byte[], EntityProductionEvent>[] branches = filtered.branch(eventsWithUnitKWH, eventsWithOtherUnit);
-
-      // English tweets
+      // load unit: kW
       KStream<byte[], EntityProductionEvent> kWStream = branches[0];
       kWStream.print(Printed.<byte[], EntityProductionEvent>toSysOut().withLabel("event-kW"));
 
-      // non-English tweets
-      KStream<byte[], EntityProductionEvent> nonKwStream = branches[1];
-      nonKwStream.print(Printed.<byte[], EntityProductionEvent>toSysOut().withLabel("events-non-kW"));
+      // load unit: not kW
+      KStream<byte[], EntityProductionEvent> notKwStream = branches[1];
+      notKwStream.print(Printed.<byte[], EntityProductionEvent>toSysOut().withLabel("events-not-kW"));
 
-      // for non-English tweets, translate the tweet text first.
+      // for events where the load unit is not kW convert the load to kW
       KStream<byte[], EntityProductionEvent> convertedStream =
-              nonKwStream.mapValues(
-                      (event) -> {
-                          return event;
-                          //return languageClient.translate(tweet, "en");
-                      });
+              notKwStream.mapValues(
+                      (event) -> unitConverter.convertToKW(event));
 
       // merge the two streams
       KStream<byte[], EntityProductionEvent> merged = kWStream.merge(convertedStream);
 
+      // filter out events with a load greater than 100 kW (measurement error since the pv system is only 100 kW)
+      KStream<byte[], EntityProductionEvent> filtered =
+              merged.filterNot(
+                      (key, event) -> event.getLoad() > 100.0);
 
-    merged.to(
+    // send the merged stream to the "pv_production_clean" topic
+    filtered.to(
             "pv_production_clean",
             Produced.with(
                     Serdes.ByteArray(),

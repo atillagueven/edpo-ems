@@ -3,13 +3,17 @@
     "name": "EntityProductionEvent",
     "type": "record",
     "fields": [
-        {
+       {
+        "name": "pvId",
+        "type": "string"
+       },
+       {
         "name": "timestamp",
         "type": "string"
       },
       {
         "name": "load",
-        "type": "int"
+        "type": "double"
       },
      {
        "name": "unitLoad",
