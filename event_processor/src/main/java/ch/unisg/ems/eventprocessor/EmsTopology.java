@@ -6,10 +6,7 @@ import ch.unisg.ems.eventprocessor.serialization.json.ProductionEventSerdes;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.Topology;
-import org.apache.kafka.streams.kstream.Consumed;
-import org.apache.kafka.streams.kstream.KStream;
-import org.apache.kafka.streams.kstream.Printed;
-import org.apache.kafka.streams.kstream.Produced;
+import org.apache.kafka.streams.kstream.*;
 import com.mitchseymour.kafka.serialization.avro.AvroSerdes;
 
 import java.util.Arrays;
@@ -34,26 +31,49 @@ class EmsTopology {
                       EntityProductionEvent contentFilteredProductionEvent = new EntityProductionEvent();
                       contentFilteredProductionEvent.setTimestamp(event.getTimestamp());
                       // contentFilteredProductionEvent.setId(event.getId());
-                      contentFilteredProductionEvent.setLoad(event.getLoad());
+                      contentFilteredProductionEvent.setUnitLoad(event.getUnitLoad());
                       return contentFilteredProductionEvent;
                     });
 
+    KStream<byte[], EntityProductionEvent> filtered =
+          contentFilteredProductionEvents.filterNot(
+                  (key, event) -> event.getLoad() > 1000);
 
-        contentFilteredProductionEvents.to(
-                "pv_production_clean",
-                Produced.with(
-                        Serdes.ByteArray(),
-                        // registryless Avro Serde
-                        AvroSerdes.get(EntityProductionEvent.class)));
+      // match all tweets that specify English as the source language
+      Predicate<byte[], EntityProductionEvent> eventsWithUnitKWH = (key, event) -> event.getUnitLoad().equals("kW");
 
-      // Perform a join on id and customer id
-      /*KTable<String, FixationClick> fixationAndClickCountsByAOI = fixationStatsByAOI.join(
-              clickCountByAOI,
-              (fixationStats, clickCount) -> new FixationClick(fixationStats, clickCount),
-              Materialized.<String, FixationClick, KeyValueStore<Bytes, byte[]>>as("FixationClickStats")
-                      .withKeySerde(Serdes.String())
-                      .withValueSerde(new FixationClickSerdes())
-      );*/
+      // match all other tweets
+      Predicate<byte[], EntityProductionEvent> eventsWithOtherUnit = (key, event) -> !event.getUnitLoad().equals("kW");
+
+      // branch based on tweet language
+      KStream<byte[], EntityProductionEvent>[] branches = filtered.branch(eventsWithUnitKWH, eventsWithOtherUnit);
+
+      // English tweets
+      KStream<byte[], EntityProductionEvent> kWStream = branches[0];
+      kWStream.print(Printed.<byte[], EntityProductionEvent>toSysOut().withLabel("event-kW"));
+
+      // non-English tweets
+      KStream<byte[], EntityProductionEvent> nonKwStream = branches[1];
+      nonKwStream.print(Printed.<byte[], EntityProductionEvent>toSysOut().withLabel("events-non-kW"));
+
+      // for non-English tweets, translate the tweet text first.
+      KStream<byte[], EntityProductionEvent> convertedStream =
+              nonKwStream.mapValues(
+                      (event) -> {
+                          return event;
+                          //return languageClient.translate(tweet, "en");
+                      });
+
+      // merge the two streams
+      KStream<byte[], EntityProductionEvent> merged = kWStream.merge(convertedStream);
+
+
+    merged.to(
+            "pv_production_clean",
+            Produced.with(
+                    Serdes.ByteArray(),
+                    // registryless Avro Serde
+                    AvroSerdes.get(EntityProductionEvent.class)));
 
 
     return builder.build();
