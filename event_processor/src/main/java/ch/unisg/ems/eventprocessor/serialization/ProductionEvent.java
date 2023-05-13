@@ -3,26 +3,26 @@ package ch.unisg.ems.eventprocessor.serialization;
 import com.google.gson.annotations.SerializedName;
 
 public class ProductionEvent {
-    @SerializedName("Id")
-    String id;
     @SerializedName("reactive")
     boolean reactive;
     @SerializedName("load")
-    int load;
+    double load;
     @SerializedName("unit_load")
     String unitLoad;
+    @SerializedName("pv_id")
+    String pvId;
     @SerializedName("timestamp")
     String timestamp;
     @SerializedName("unit_reactive")
     String unitReactive;
 
 
-    public String getId() {
-        return id;
+    public String getPvId() {
+        return pvId;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setPvId(String pvId) {
+        this.pvId = pvId;
     }
 
     public boolean isReactive() {
@@ -33,11 +33,11 @@ public class ProductionEvent {
         this.reactive = reactive;
     }
 
-    public int getLoad() {
+    public double getLoad() {
         return load;
     }
 
-    public void setLoad(int load) {
+    public void setLoad(double load) {
         this.load = load;
     }
 

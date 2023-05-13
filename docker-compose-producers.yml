@@ -22,7 +22,7 @@ services:
   consumerB:
     image: edpo-ems-producer-consumation
     environment:
-      JAVA_OPTS: "2022_Consumation.csv"
+      JAVA_OPTS: "2022_Consumation_alt.csv"
 
 networks:
   ems:
