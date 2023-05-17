@@ -4,6 +4,8 @@ EMSai is an energy management systems provider.
 The project was developed as part of the EDPO course at the University of St. Gallen.
 Currently the Sales, Inventory and Payment services are implemented, enabeling a client to order a battery for an EMS and have it installed.
 
+You can find a screenshot of the running application [here](https://github.com/atillagueven/edpo-ems/blob/e9aad5828c885c16ae32af9d3030b066f8cd00eb/Screenshot-of-running-app-EMS.png).
+
 ## Setup
 
 ### Start Vue.js application
