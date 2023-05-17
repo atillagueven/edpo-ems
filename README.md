@@ -6,6 +6,15 @@ Currently the Sales, Inventory and Payment services are implemented, enabeling a
 
 ## Setup
 
+### Start Vue.js application
+To start the vue.js Application, change to folder './frontend-monitoring'.
+For running the application run: 
+
+`npm install`
+
+`npm run dev`
+
+
 To start the application, you need to have [Docker](https://www.docker.com/) installed.
 
 run `docker-compose -f docker-compose.yml up` (Camunda Platform) or `docker-compose -f docker-compose-cloud.yml up` (Camunda Cloud) to start the Kafka, Zeebee, Kafdrop, Camunda Tasklist, Elasticsearch, Operate and Zookeeper Containers.
