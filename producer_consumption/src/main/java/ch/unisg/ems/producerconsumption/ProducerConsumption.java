@@ -66,7 +66,11 @@ public class ProducerConsumption {
             String[] values = r.get(0).split(delimiter);
             JSONObject jsonObj = new JSONObject();
             for (int i = 0; i < values.length; i++) {
-                jsonObj.put(headers[i], values[i]);
+                if (Objects.equals(headers[i], "timestamp")) {
+                    jsonObj.put(headers[i], Instant.now().getEpochSecond());
+                } else {
+                    jsonObj.put(headers[i], values[i]);
+                }
             }
 
             String message = jsonObj.toJSONString(); // gaze.toJSONString();

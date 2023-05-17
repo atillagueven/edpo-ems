@@ -3,34 +3,21 @@ package ch.unisg.ems.eventprocessor.serialization;
 import com.google.gson.annotations.SerializedName;
 
 public class ConsumptionEvent {
-    @SerializedName("reactive")
-    boolean reactive;
     @SerializedName("load")
     double load;
     @SerializedName("unit_load")
     String unitLoad;
-    @SerializedName("pv_id")
-    String pvId;
+    @SerializedName("consumer_id")
+    String consumerId;
     @SerializedName("timestamp")
-    String timestamp;
-    @SerializedName("unit_reactive")
-    String unitReactive;
+    Long timestamp;
 
-
-    public String getPvId() {
-        return pvId;
+    public String getConsumerId() {
+        return consumerId;
     }
 
-    public void setPvId(String pvId) {
-        this.pvId = pvId;
-    }
-
-    public boolean isReactive() {
-        return reactive;
-    }
-
-    public void setReactive(boolean reactive) {
-        this.reactive = reactive;
+    public void setConsumerId(String consumerId) {
+        this.consumerId = consumerId;
     }
 
     public double getLoad() {
@@ -49,20 +36,12 @@ public class ConsumptionEvent {
         this.unitLoad = unitLoad;
     }
 
-    public String getTimestamp() {
+    public Long getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(String timestamp) {
+    public void setTimestamp(Long timestamp) {
         this.timestamp = timestamp;
-    }
-
-    public String getUnitReactive() {
-        return unitReactive;
-    }
-
-    public void setUnitReactive(String unitReactive) {
-        this.unitReactive = unitReactive;
     }
 
 }

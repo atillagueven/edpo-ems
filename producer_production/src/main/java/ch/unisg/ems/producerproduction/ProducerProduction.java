@@ -5,7 +5,9 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import com.opencsv.CSVReader;
 import org.json.simple.JSONObject;
 import java.io.*;
+import java.time.Instant;
 import java.util.*;
+import java.util.Date;
 
 public class ProducerProduction {
 
@@ -67,7 +69,11 @@ public class ProducerProduction {
             String[] values = r.get(0).split(delimiter);
             JSONObject jsonObj = new JSONObject();
             for (int i = 0; i < values.length; i++) {
-                jsonObj.put(headers[i], values[i]);
+                if (Objects.equals(headers[i], "timestamp")) {
+                    jsonObj.put(headers[i], Instant.now().getEpochSecond());
+                } else {
+                    jsonObj.put(headers[i], values[i]);
+                }
             }
 
             String message = jsonObj.toJSONString(); // gaze.toJSONString();

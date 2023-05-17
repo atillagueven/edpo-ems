@@ -12,7 +12,7 @@ public class ProductionEvent {
     @SerializedName("pv_id")
     String pvId;
     @SerializedName("timestamp")
-    String timestamp;
+    Long timestamp;
     @SerializedName("unit_reactive")
     String unitReactive;
 
@@ -49,11 +49,11 @@ public class ProductionEvent {
         this.unitLoad = unitLoad;
     }
 
-    public String getTimestamp() {
+    public Long getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(String timestamp) {
+    public void setTimestamp(Long timestamp) {
         this.timestamp = timestamp;
     }
 
